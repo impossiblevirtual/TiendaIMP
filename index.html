@@ -71,6 +71,13 @@
 <p class="hint" id="deliveryNote">Importante: este es un servicio personalizado, no una descarga automática. Si ya pagaste, completá el formulario e indicá que el pago fue realizado para coordinar el trabajo.</p>
 </div>
 </section>
+<section id="preguntas" class="offer" style="margin-top:18px">
+<h2 id="faqTitle">Preguntas frecuentes</h2>
+<div style="padding:10px 0;border-bottom:1px solid #e2e8f0"><h3 id="faqQ1">¿Qué recibo por US$ 15?</h3><p id="faqA1">Un calendario personalizado de 30 días con ideas de publicaciones, textos y llamadas a la acción, adaptados a la información que nos compartas.</p></div>
+<div style="padding:10px 0;border-bottom:1px solid #e2e8f0"><h3 id="faqQ2">¿Lo recibo inmediatamente después de pagar?</h3><p id="faqA2">No. Es un servicio personalizado. Después del pago, completá el formulario de consulta para coordinar el alcance y el plazo de entrega por correo.</p></div>
+<div style="padding:10px 0;border-bottom:1px solid #e2e8f0"><h3 id="faqQ3">¿Necesito experiencia en marketing?</h3><p id="faqA3">No. El calendario está pensado para ayudarte a organizar ideas; tendrás que revisar los textos y adaptar precios, fotos y datos de tu negocio antes de publicar.</p></div>
+<div style="padding:10px 0"><h3 id="faqQ4">¿Puedo consultar antes de pagar?</h3><p id="faqA4">Sí. Usá el formulario de contacto para explicar qué necesitás y confirmar si el servicio se adapta a tu negocio.</p></div>
+</section>
 <section id="contacto" style="margin-top:18px">
 <h2 id="contactTitle">¿Querés un plan personalizado para tu negocio?</h2>
 <p class="hint" id="contactIntro">Contame qué necesitás y te responderé por correo para preparar una propuesta.</p>
@@ -138,6 +145,14 @@ function applyLang(){
  [...$('contactService').options].forEach((o,i)=>o.textContent=c.services[i]);
  $('contactDetailsLabel').textContent=c.details;$('contactDetails').placeholder=c.detailsPh;
  $('contactSend').textContent=c.send;$('contactPrivacy').textContent=c.privacy;
+ const faqCopy={
+ es:{title:'Preguntas frecuentes',q:['¿Qué recibo por US$ 15?','¿Lo recibo inmediatamente después de pagar?','¿Necesito experiencia en marketing?','¿Puedo consultar antes de pagar?'],a:['Un calendario personalizado de 30 días con ideas de publicaciones, textos y llamadas a la acción, adaptados a la información que nos compartas.','No. Es un servicio personalizado. Después del pago, completá el formulario de consulta para coordinar el alcance y el plazo de entrega por correo.','No. El calendario está pensado para ayudarte a organizar ideas; tendrás que revisar los textos y adaptar precios, fotos y datos de tu negocio antes de publicar.','Sí. Usá el formulario de contacto para explicar qué necesitás y confirmar si el servicio se adapta a tu negocio.']},
+ en:{title:'Frequently asked questions',q:['What do I get for USD 15?','Will I receive it immediately after paying?','Do I need marketing experience?','Can I ask questions before paying?'],a:['A custom 30-day calendar with post ideas, captions and calls to action, tailored to the information you share.','No. This is a custom service. After paying, complete the inquiry form so we can agree on the scope and delivery timeframe by email.','No. The calendar helps you organize ideas; you should review the copy and adapt prices, photos and business details before publishing.','Yes. Use the contact form to explain what you need and check whether the service fits your business.']},
+ pt:{title:'Perguntas frequentes',q:['O que recebo por US$ 15?','Recebo imediatamente após pagar?','Preciso ter experiência em marketing?','Posso tirar dúvidas antes de pagar?'],a:['Um calendário personalizado de 30 dias com ideias de publicações, textos e chamadas para ação, adaptados às informações que você compartilhar.','Não. Este é um serviço personalizado. Depois de pagar, preencha o formulário para combinarmos por e-mail o escopo e o prazo de entrega.','Não. O calendário ajuda a organizar ideias; revise os textos e adapte preços, fotos e dados do seu negócio antes de publicar.','Sim. Use o formulário de contato para explicar o que precisa e confirmar se o serviço é adequado ao seu negócio.']}
+ };
+ const faq=faqCopy[$('idioma').value]||faqCopy.es;
+ $('faqTitle').textContent=faq.title;
+ for(let i=1;i<=4;i++){ $('faqQ'+i).textContent=faq.q[i-1];$('faqA'+i).textContent=faq.a[i-1]; }
  const proc=processCopy[$('idioma').value]||processCopy.es;
  $('howTitle').textContent=proc.title;
  [...$('howSteps').children].forEach((li,i)=>li.textContent=proc.steps[i]);
