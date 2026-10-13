@@ -183,7 +183,7 @@ function applyLang(){
  document.querySelector('footer').textContent=t.footer;
  $('resultado').innerHTML='<p class="hint">'+t.empty+'</p>';$('calendario').innerHTML='';textoCompleto='';planSemanal='';
 }
-$('idioma').addEventListener('change',applyLang);
+$('idioma').addEventListener('change',()=>{const rutas={es:'/',en:'/en/',pt:'/pt/'};window.location.href='https://spvirtual.github.io/dolar-digital'+rutas[$('idioma').value];});
 $('generar').addEventListener('click',()=>{
  const t=lang(),negocio=$('negocio').value.trim()||( $('idioma').value==='en'?'my business':$('idioma').value==='pt'?'meu negócio':'mi negocio');
  const objetivo=$('objetivo').value,red=$('red').value,oferta=$('oferta').value.trim(),tono=$('tono').value;
