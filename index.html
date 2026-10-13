@@ -11,9 +11,10 @@
 </style>
 </head>
 <body>
-<header><div><h1>Dólar Digital</h1><p>Ideas y textos listos para adaptar y publicar en las redes de tu negocio.</p></div></header>
+<header><div><h1>Dólar Digital</h1><p id="hero">Ideas y textos listos para adaptar y publicar en las redes de tu negocio.</p></div></header>
 <main><section>
-<h2>Creá tu publicación</h2>
+<label for="idioma" id="labelIdioma">Idioma / Language / Idioma</label><select id="idioma"><option value="es">Español</option><option value="en">English</option><option value="pt">Português</option></select>
+<h2 id="formTitle">Creá tu publicación</h2>
 <p class="hint">Completá los datos y obtené cinco ideas más un texto promocional para copiar. Gratis y sin registrarte.</p>
 <label for="negocio">¿Qué negocio tenés?</label>
 <input id="negocio" maxlength="80" placeholder="Ej.: ropa deportiva, peluquería, comida casera">
@@ -35,54 +36,67 @@
 <footer>Una herramienta gratuita para impulsar pequeños negocios.</footer>
 <script>
 const $=id=>document.getElementById(id);
-let textoCompleto='';
-let planSemanal='';
+let textoCompleto='',planSemanal='';
+const T={
+es:{hero:'Ideas y textos listos para adaptar y publicar en las redes de tu negocio.',form:'Creá tu publicación',intro:'Completá los datos y obtené cinco ideas más un texto promocional para copiar. Gratis y sin registrarte.',business:'¿Qué negocio tenés?',businessPh:'Ej.: ropa deportiva, peluquería, comida casera',goal:'Objetivo',goals:['Conseguir más ventas','Generar confianza','Recibir comentarios','Presentar una novedad'],social:'Red social',offer:'Producto, servicio u oferta (opcional)',offerPh:'Ej.: 2x1 en camisetas hasta el viernes',tone:'Estilo del mensaje',tones:['Cercano y amigable','Profesional','Entusiasta','Directo y breve'],generate:'Crear mis ideas',calendar:'Crear calendario de 7 días',copy:'Copiar texto',download:'Descargar mi plan',reset:'Empezar de nuevo',tip:'Consejo: agregá fotos reales, precios correctos y datos de contacto. Revisá el texto antes de publicarlo.',footer:'Una herramienta gratuita para impulsar pequeños negocios.',empty:'Tus ideas aparecerán acá.',ideasTitle:'Tus ideas para',postTitle:'Texto sugerido para',open:'¡Hola! 😊',professional:'Te presentamos nuestra propuesta:',excited:'¡Tenemos algo para vos! ✨',direct:'Mirá esta propuesta:',calls:{vender:'Escribinos por mensaje para consultar y hacer tu pedido.',confianza:'Conocé nuestro trabajo y consultanos sin compromiso.',interaccion:'Contanos en los comentarios qué te parece.',novedad:'Mandanos un mensaje y te damos todos los detalles.'},ideas:['Mostrá tu producto o servicio más elegido y explicá qué lo hace útil.','Respondé una pregunta frecuente que suelen hacer tus clientes.','Compartí una foto o video del detrás de escena de tu trabajo.','Pedí a tus seguidores que elijan entre dos opciones relacionadas con tu negocio.','Presentá un beneficio concreto y explicá cómo pueden consultarte.'],days:['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'],dayTitles:['Presentación','Producto o servicio','Consejo útil','Confianza','Invitación','Participación','Resumen'],dayIdeas:['Mostrá quién está detrás de {b} y qué ofrecés.','Presentá tu producto o servicio destacado{offer}.','Compartí un consejo sencillo relacionado con lo que vendés.','Respondé una pregunta frecuente o compartí un comentario real de un cliente, con su permiso.','Invitá a consultar precios, disponibilidad o detalles por mensaje.','Hacé una pregunta o encuesta para conocer las preferencias de tus seguidores.','Recordá lo más importante de la semana y adelantá lo que viene.'],week:'Tu calendario semanal',weekTip:'Usalo como guía y adaptá cada idea a tu negocio.',suggestion:'Sugerencia: ',first:'Primero creá contenido',copied:'¡Copiado!',copiedNeed:'Primero creá tus ideas',resetHint:'Tus ideas aparecerán acá.',heading:{Instagram:'Idea para un carrusel o Reel',Facebook:'Publicación para tu comunidad',WhatsApp:'Estado breve para tus contactos',TikTok:'Idea para un video corto'},cta:{vender:'Escribinos para consultar y hacer tu pedido.',confianza:'Consultanos sin compromiso; te respondemos tus dudas.',interaccion:'Te leemos en los comentarios: ¿qué opinás?',novedad:'Escribinos y te contamos todos los detalles.'}},
+en:{hero:'Ready-to-adapt ideas and captions for your business social media.',form:'Create your post',intro:'Fill in the details to get five ideas and a promotional caption. Free, no sign-up.',business:'What kind of business do you run?',businessPh:'E.g. sportswear, hair salon, homemade food',goal:'Goal',goals:['Get more sales','Build trust','Get comments','Announce something new'],social:'Social platform',offer:'Product, service or offer (optional)',offerPh:'E.g. 2-for-1 shirts through Friday',tone:'Writing style',tones:['Friendly and warm','Professional','Enthusiastic','Direct and brief'],generate:'Create my ideas',calendar:'Create a 7-day calendar',copy:'Copy text',download:'Download my plan',reset:'Start over',tip:'Tip: add real photos, accurate prices and contact details. Review before posting.',footer:'A free tool to support small businesses.',empty:'Your ideas will appear here.',ideasTitle:'Ideas for',postTitle:'Suggested caption for',open:'Hello! 😊',professional:'Here is what we have for you:',excited:'We have something for you! ✨',direct:'Take a look:',calls:{vender:'Message us to ask questions or place an order.',confianza:'Learn more about our work and ask us anything.',interaccion:'Tell us what you think in the comments.',novedad:'Send us a message for all the details.'},ideas:['Show your most popular product or service and explain its benefit.','Answer a question customers often ask.','Share a behind-the-scenes photo or video.','Ask followers to choose between two options related to your business.','Highlight a clear benefit and explain how people can contact you.'],days:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],dayTitles:['Introduction','Product or service','Helpful tip','Trust','Invitation','Engagement','Weekly recap'],dayIdeas:['Introduce the person behind {b} and what you offer.','Feature your product or service{offer}.','Share a simple tip related to what you sell.','Answer a common question or share a real customer comment with permission.','Invite people to ask about prices, availability or details.','Ask a question or run a poll to learn your followers’ preferences.','Recap the week and preview what is coming next.'],week:'Your weekly calendar',weekTip:'Use this as a guide and adapt each idea to your business.',suggestion:'Try this: ',first:'Create some content first',copied:'Copied!',copiedNeed:'Create your ideas first',resetHint:'Your ideas will appear here.',heading:{Instagram:'Carousel or Reel idea',Facebook:'Community post',WhatsApp:'Short status update',TikTok:'Short video idea'},cta:{vender:'Message us to ask questions or place an order.',confianza:'Ask us anything, no obligation.',interaccion:'Tell us what you think in the comments.',novedad:'Message us for all the details.'}},
+pt:{hero:'Ideias e textos prontos para adaptar e publicar nas redes sociais do seu negócio.',form:'Crie sua publicação',intro:'Preencha os dados para receber cinco ideias e um texto promocional. Grátis e sem cadastro.',business:'Qual é o seu negócio?',businessPh:'Ex.: roupas esportivas, salão, comida caseira',goal:'Objetivo',goals:['Conseguir mais vendas','Gerar confiança','Receber comentários','Apresentar uma novidade'],social:'Rede social',offer:'Produto, serviço ou oferta (opcional)',offerPh:'Ex.: 2 por 1 em camisetas até sexta-feira',tone:'Estilo da mensagem',tones:['Próximo e amigável','Profissional','Entusiasmado','Direto e breve'],generate:'Criar minhas ideias',calendar:'Criar calendário de 7 dias',copy:'Copiar texto',download:'Baixar meu plano',reset:'Começar de novo',tip:'Dica: adicione fotos reais, preços corretos e dados de contato. Revise antes de publicar.',footer:'Uma ferramenta gratuita para apoiar pequenos negócios.',empty:'Suas ideias aparecerão aqui.',ideasTitle:'Ideias para',postTitle:'Texto sugerido para',open:'Olá! 😊',professional:'Confira nossa proposta:',excited:'Temos algo para você! ✨',direct:'Confira esta proposta:',calls:{vender:'Envie uma mensagem para consultar e fazer seu pedido.',confianza:'Conheça nosso trabalho e tire suas dúvidas.',interaccion:'Conte nos comentários o que você acha.',novedad:'Envie uma mensagem para saber todos os detalhes.'},ideas:['Mostre seu produto ou serviço mais popular e explique seu benefício.','Responda a uma pergunta frequente dos clientes.','Compartilhe uma foto ou vídeo dos bastidores do seu trabalho.','Peça aos seguidores que escolham entre duas opções relacionadas ao negócio.','Destaque um benefício e explique como as pessoas podem entrar em contato.'],days:['Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado','Domingo'],dayTitles:['Apresentação','Produto ou serviço','Dica útil','Confiança','Convite','Participação','Resumo semanal'],dayIdeas:['Mostre quem está por trás de {b} e o que você oferece.','Destaque seu produto ou serviço{offer}.','Compartilhe uma dica simples relacionada ao que você vende.','Responda a uma pergunta frequente ou compartilhe um comentário real de cliente, com autorização.','Convide as pessoas a consultar preços, disponibilidade ou detalhes.','Faça uma pergunta ou enquete para conhecer as preferências dos seguidores.','Resuma a semana e conte o que vem pela frente.'],week:'Seu calendário semanal',weekTip:'Use como guia e adapte cada ideia ao seu negócio.',suggestion:'Sugestão: ',first:'Crie conteúdo primeiro',copied:'Copiado!',copiedNeed:'Crie suas ideias primeiro',resetHint:'Suas ideias aparecerão aqui.',heading:{Instagram:'Ideia para carrossel ou Reel',Facebook:'Publicação para sua comunidade',WhatsApp:'Status curto para seus contatos',TikTok:'Ideia para vídeo curto'},cta:{vender:'Envie uma mensagem para consultar e fazer seu pedido.',confianza:'Tire suas dúvidas sem compromisso.',interaccion:'Conte nos comentários o que você acha.',novedad:'Envie uma mensagem para saber todos os detalhes.'}}
+};
+function lang(){return T[$('idioma').value]||T.es}
+function applyLang(){
+ const t=lang(),id=$('idioma').value;
+ document.documentElement.lang=id;
+ $('hero').textContent=t.hero;$('formTitle').textContent=t.form;
+ document.querySelector('label[for="negocio"]').textContent=t.business;$('negocio').placeholder=t.businessPh;
+ document.querySelector('label[for="objetivo"]').textContent=t.goal;
+ [...$('objetivo').options].forEach((o,i)=>o.textContent=t.goals[i]);
+ document.querySelector('label[for="red"]').textContent=t.social;
+ document.querySelector('label[for="oferta"]').textContent=t.offer;$('oferta').placeholder=t.offerPh;
+ document.querySelector('label[for="tono"]').textContent=t.tone;
+ [...$('tono').options].forEach((o,i)=>o.textContent=t.tones[i]);
+ $('generar').textContent=t.generate;$('planificar').textContent=t.calendar;$('copiar').textContent=t.copy;$('descargar').textContent=t.download;$('reiniciar').textContent=t.reset;
+ document.querySelector('section > .hint').textContent=t.intro;
+ const hints=document.querySelectorAll('section > .hint');hints[hints.length-1].textContent=t.tip;
+ document.querySelector('footer').textContent=t.footer;
+ $('resultado').innerHTML='<p class="hint">'+t.empty+'</p>';$('calendario').innerHTML='';textoCompleto='';planSemanal='';
+}
+$('idioma').addEventListener('change',applyLang);
 $('generar').addEventListener('click',()=>{
- const negocio=$('negocio').value.trim()||'mi negocio';
- const objetivo=$('objetivo').value;
- const red=$('red').value;
- const oferta=$('oferta').value.trim();
- const tono=$('tono').value;
- const apertura={cercano:'¡Hola! 😊',profesional:'Te presentamos nuestra propuesta:',entusiasta:'¡Tenemos algo para vos! ✨',directo:'Mirá esta propuesta:'}[tono];
- const llamada={vender:'Escribinos por mensaje para consultar y hacer tu pedido.',confianza:'Conocé nuestro trabajo y consultanos sin compromiso.',interaccion:'Contanos en los comentarios qué te parece.',novedad:'Mandanos un mensaje y te damos todos los detalles.'}[objetivo];
- const ideas=[
- 'Mostrá tu producto o servicio más elegido y explicá qué lo hace útil.',
- 'Respondé una pregunta frecuente que suelen hacer tus clientes.',
- 'Compartí una foto o video del detrás de escena de tu trabajo.',
- 'Pedí a tus seguidores que elijan entre dos opciones relacionadas con tu negocio.',
- 'Presentá un beneficio concreto y explicá cómo pueden consultarte.'
- ];
- const encabezado={Instagram:'Idea para un carrusel o Reel',Facebook:'Publicación para tu comunidad',WhatsApp:'Estado breve para tus contactos',TikTok:'Idea para un video corto'}[red];
- const post=[apertura,oferta?'En '+negocio+' tenemos: '+oferta+'.':'En '+negocio+' queremos ayudarte con una propuesta pensada para vos.',llamada,red==='Instagram'?'#Emprendedores #'+negocio.replace(/[^a-z0-9]/gi,''):''].filter(Boolean).join('\n\n');
- textoCompleto='Ideas para '+negocio+' — '+red+'\n\n'+ideas.map((idea,i)=>(i+1)+'. '+idea).join('\n')+'\n\n'+encabezado+'\n\n'+post;
- $('resultado').innerHTML='';
- const h=document.createElement('h2');h.textContent='Tus ideas para '+negocio; $('resultado').appendChild(h);
+ const t=lang(),negocio=$('negocio').value.trim()||( $('idioma').value==='en'?'my business':$('idioma').value==='pt'?'meu negócio':'mi negocio');
+ const objetivo=$('objetivo').value,red=$('red').value,oferta=$('oferta').value.trim(),tono=$('tono').value;
+ const apertura={cercano:t.open,profesional:t.professional,entusiasta:t.excited,directo:t.direct}[tono];
+ const llamada=t.calls[objetivo],ideas=t.ideas;
+ const encabezado=t.heading[red];
+ const post=[apertura,oferta?( $('idioma').value==='en'?'At ':$('idioma').value==='pt'?'No ':'En ')+negocio+( $('idioma').value==='en'?' we offer: ':$('idioma').value==='pt'?' temos: ':' tenemos: ')+oferta+'.':($('idioma').value==='en'?'At ':$('idioma').value==='pt'?'No ':'En ')+negocio+($('idioma').value==='en'?' we want to help you with an offer made for you.':$('idioma').value==='pt'?' queremos ajudar com uma proposta pensada para você.':' queremos ayudarte con una propuesta pensada para vos.'),llamada,$('idioma').value==='es'&&red==='Instagram'?'#Emprendedores #'+negocio.replace(/[^a-z0-9]/gi,''):''].filter(Boolean).join('\n\n');
+ textoCompleto=t.ideasTitle+' '+negocio+' — '+red+'\n\n'+ideas.map((idea,i)=>(i+1)+'. '+idea).join('\n')+'\n\n'+encabezado+'\n\n'+post;
+ $('resultado').innerHTML='';const h=document.createElement('h2');h.textContent=t.ideasTitle+' '+negocio;$('resultado').appendChild(h);
  const list=document.createElement('ol');ideas.forEach(idea=>{const li=document.createElement('li');li.textContent=idea;li.style.marginBottom='8px';list.appendChild(li)});$('resultado').appendChild(list);
- const title=document.createElement('h2');title.textContent='Texto sugerido para '+red;$('resultado').appendChild(title);
+ const title=document.createElement('h2');title.textContent=t.postTitle+' '+red;$('resultado').appendChild(title);
  const p=document.createElement('div');p.className='post';p.textContent=post;$('resultado').appendChild(p);
 });
 $('planificar').addEventListener('click',()=>{
- const negocio=$('negocio').value.trim()||'mi negocio', oferta=$('oferta').value.trim(), red=$('red').value, objetivo=$('objetivo').value;
- const dias=[['Lunes','Presentación','Mostrá quién está detrás de '+negocio+' y qué ofrecés.'],['Martes','Producto o servicio','Presentá tu producto o servicio destacado'+(oferta?' y mencioná '+oferta:'')+'.'],['Miércoles','Consejo útil','Compartí un consejo sencillo relacionado con lo que vendés.'],['Jueves','Confianza','Respondé una pregunta frecuente o compartí un comentario real de un cliente, con su permiso.'],['Viernes','Invitación','Invitá a consultar precios, disponibilidad o detalles por mensaje.'],['Sábado','Participación','Hacé una pregunta o encuesta para conocer las preferencias de tus seguidores.'],['Domingo','Resumen','Recordá lo más importante de la semana y adelantá lo que viene.']];
- const llamados={vender:'Escribinos para consultar y hacer tu pedido.',confianza:'Consultanos sin compromiso; te respondemos tus dudas.',interaccion:'Te leemos en los comentarios: ¿qué opinás?',novedad:'Escribinos y te contamos todos los detalles.'};
- planSemanal='CALENDARIO DE 7 DÍAS — '+negocio+' ('+red+')\n\n'+dias.map((d,i)=>(i+1)+'. '+d[0]+' — '+d[1]+'\n'+d[2]+'\n'+llamados[objetivo]).join('\n\n');
- const cont=$('calendario');cont.innerHTML='';const h=document.createElement('h2');h.textContent='Tu calendario semanal';cont.appendChild(h);
- const p=document.createElement('p');p.className='hint';p.textContent='Usalo como guía y adaptá cada idea a tu negocio.';cont.appendChild(p);
- dias.forEach((d,i)=>{const card=document.createElement('div');card.className='post';card.style.marginBottom='10px';card.textContent=d[0]+' · '+d[1]+'\n'+d[2]+'\nSugerencia: '+llamados[objetivo];cont.appendChild(card)});
+ const t=lang(),id=$('idioma').value,negocio=$('negocio').value.trim()||(id==='en'?'my business':id==='pt'?'meu negócio':'mi negocio'),oferta=$('oferta').value.trim(),red=$('red').value,objetivo=$('objetivo').value;
+ const dias=t.days.map((day,i)=>[day,t.dayTitles[i],t.dayIdeas[i].replace('{b}',negocio).replace('{offer}',oferta?(id==='en'?' and offer '+oferta:id==='pt'?' e oferta '+oferta:' y mencioná '+oferta):'')]);
+ const llamada=t.cta[objetivo];
+ planSemanal=t.week+' — '+negocio+' ('+red+')\n\n'+dias.map((d,i)=>(i+1)+'. '+d[0]+' — '+d[1]+'\n'+d[2]+'\n'+llamada).join('\n\n');
+ const cont=$('calendario');cont.innerHTML='';const h=document.createElement('h2');h.textContent=t.week;cont.appendChild(h);
+ const p=document.createElement('p');p.className='hint';p.textContent=t.weekTip;cont.appendChild(p);
+ dias.forEach(d=>{const card=document.createElement('div');card.className='post';card.style.marginBottom='10px';card.textContent=d[0]+' · '+d[1]+'\n'+d[2]+'\n'+t.suggestion+llamada;cont.appendChild(card)});
 });
 $('descargar').addEventListener('click',()=>{
- const contenido=[textoCompleto,planSemanal].filter(Boolean).join('\n\n------------------------------\n\n');
- if(!contenido){$('descargar').textContent='Primero creá contenido';return}
+ const contenido=[textoCompleto,planSemanal].filter(Boolean).join('\n\n------------------------------\n\n'),t=lang();
+ if(!contenido){$('descargar').textContent=t.first;setTimeout(()=>$('descargar').textContent=t.download,1600);return}
  const blob=new Blob([contenido],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download='plan-contenidos.txt';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+ a.href=url;a.download='dolar-digital-content-plan.txt';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
 });
 $('copiar').addEventListener('click',async()=>{
- if(!textoCompleto){$('copiar').textContent='Primero creá tus ideas';setTimeout(()=>$('copiar').textContent='Copiar texto',1600);return}
- try{await navigator.clipboard.writeText(textoCompleto);$('copiar').textContent='¡Copiado!';}
- catch(e){const area=document.createElement('textarea');area.value=textoCompleto;document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();$('copiar').textContent='¡Copiado!';}
- setTimeout(()=>$('copiar').textContent='Copiar texto',1600);
+ const t=lang();if(!textoCompleto&&!planSemanal){$('copiar').textContent=t.copiedNeed;setTimeout(()=>$('copiar').textContent=t.copy,1600);return}
+ try{await navigator.clipboard.writeText([textoCompleto,planSemanal].filter(Boolean).join('\n\n'));$('copiar').textContent=t.copied;}
+ catch(e){const area=document.createElement('textarea');area.value=[textoCompleto,planSemanal].filter(Boolean).join('\n\n');document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();$('copiar').textContent=t.copied;}
+ setTimeout(()=>$('copiar').textContent=t.copy,1600);
 });
-$('reiniciar').addEventListener('click',()=>{ $('negocio').value='';$('oferta').value='';$('objetivo').selectedIndex=0;$('red').selectedIndex=0;$('tono').selectedIndex=0;$('resultado').innerHTML='<p class="hint">Tus ideas aparecerán acá.</p>';textoCompleto='';window.scrollTo({top:0,behavior:'smooth'});});
+$('reiniciar').addEventListener('click',()=>{$('negocio').value='';$('oferta').value='';$('objetivo').selectedIndex=0;$('red').selectedIndex=0;$('tono').selectedIndex=0;$('resultado').innerHTML='<p class="hint">'+lang().resetHint+'</p>';$('calendario').innerHTML='';textoCompleto='';planSemanal='';window.scrollTo({top:0,behavior:'smooth'});});
+applyLang();
 </script>
 </body>
 </html>
