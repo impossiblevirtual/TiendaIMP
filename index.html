@@ -33,6 +33,15 @@
 <div class="actions"><button class="secondary" id="copiar" type="button">Copiar texto</button><button class="secondary" id="descargar" type="button">Descargar mi plan</button></div><button class="secondary" id="reiniciar" type="button">Empezar de nuevo</button>
 <p class="hint">Consejo: agregá fotos reales, precios correctos y datos de contacto. Revisá el texto antes de publicarlo.</p>
 </section>
+<section id="muestra" class="offer" style="margin-top:18px">
+<p class="eyebrow" id="sampleEyebrow">Ejemplo de contenido</p>
+<h2 id="sampleTitle">Tres publicaciones de ejemplo</h2>
+<p id="sampleIntro">Ejemplo ilustrativo para una panadería ficticia. Adaptamos cada calendario al rubro, los productos y el tono de cada negocio.</p>
+<div class="post" style="margin-bottom:10px"><strong id="sampleDay1">1. Producto destacado</strong><p id="sampleText1">🥐 ¿Ya elegiste algo rico para acompañar el mate? Hoy te esperamos con opciones recién preparadas. Escribinos para consultar variedades y disponibilidad.</p></div>
+<div class="post" style="margin-bottom:10px"><strong id="sampleDay2">2. Detrás de escena</strong><p id="sampleText2">El secreto está en los pequeños detalles: preparación, dedicación y productos hechos con cuidado. ¿Qué te gustaría ver en nuestra próxima publicación?</p></div>
+<div class="post"><strong id="sampleDay3">3. Invitación</strong><p id="sampleText3">¿Tenés una reunión o querés darte un gusto? Consultanos por mensaje y te ayudamos a elegir. ¡Te leemos!</p></div>
+<p class="hint" id="sampleDisclaimer">Muestra ilustrativa: no corresponde a un cliente real.</p>
+</section>
 <section id="ofertaServicio" class="offer">
 <p class="eyebrow" id="offerEyebrow">Servicio personalizado</p>
 <h2 id="offerTitle">Un mes de contenido para tu negocio</h2>
@@ -80,12 +89,21 @@ en:{eyebrow:'Custom service',title:'A month of content for your business',intro:
 pt:{eyebrow:'Serviço personalizado',title:'Um mês de conteúdo para seu negócio',intro:'Receba um calendário de 30 dias com ideias e textos adaptados ao seu negócio para planejar suas publicações com mais clareza.',features:['30 ideias de publicações organizadas por dia.','Textos e chamadas para ação adaptados ao seu negócio.','Orientação para divulgar produtos e serviços.','Entrega digital, pronta para revisar e adaptar.'],note:'Preço de lançamento estimado; confirmaremos o valor final conforme suas necessidades.',price:'Argentina: ARS 20.000 · Internacional: US$ 15',cta:'Consultar sobre meu calendário'}
 };
 function lang(){return T[$('idioma').value]||T.es}
+const sampleCopy={
+es:{eyebrow:'Ejemplo de contenido',title:'Tres publicaciones de ejemplo',intro:'Ejemplo ilustrativo para una panadería ficticia. Adaptamos cada calendario al rubro, los productos y el tono de cada negocio.',days:['1. Producto destacado','2. Detrás de escena','3. Invitación'],texts:['🥐 ¿Ya elegiste algo rico para acompañar el mate? Hoy te esperamos con opciones recién preparadas. Escribinos para consultar variedades y disponibilidad.','El secreto está en los pequeños detalles: preparación, dedicación y productos hechos con cuidado. ¿Qué te gustaría ver en nuestra próxima publicación?','¿Tenés una reunión o querés darte un gusto? Consultanos por mensaje y te ayudamos a elegir. ¡Te leemos!'],disclaimer:'Muestra ilustrativa: no corresponde a un cliente real.'},
+en:{eyebrow:'Content sample',title:'Three sample posts',intro:'Illustrative example for a fictional bakery. Each calendar is tailored to the business, its products and its tone of voice.',days:['1. Featured product','2. Behind the scenes','3. Invitation'],texts:['🥐 Looking for something delicious with your coffee? We have freshly prepared treats today. Message us to ask about options and availability.','It’s all in the little details: preparation, care and thoughtfully made products. What would you like to see in our next post?','Planning a get-together or treating yourself? Message us and we’ll help you choose. We’d love to hear from you!'],disclaimer:'Illustrative sample: this is not work for a real client.'},
+pt:{eyebrow:'Exemplo de conteúdo',title:'Três publicações de exemplo',intro:'Exemplo ilustrativo para uma padaria fictícia. Cada calendário é adaptado ao negócio, aos produtos e ao tom da marca.',days:['1. Produto em destaque','2. Bastidores','3. Convite'],texts:['🥐 Já escolheu algo gostoso para acompanhar seu café? Hoje temos opções fresquinhas. Envie uma mensagem para consultar variedades e disponibilidade.','O segredo está nos pequenos detalhes: preparo, dedicação e produtos feitos com cuidado. O que você gostaria de ver na próxima publicação?','Vai receber visitas ou quer se presentear? Envie uma mensagem e ajudamos você a escolher. Vamos adorar conversar!'],disclaimer:'Exemplo ilustrativo: não é um trabalho feito para um cliente real.'}
+};
 function applyLang(){
  const contactCopy={
  es:{title:'¿Querés un plan personalizado para tu negocio?',intro:'Contame qué necesitás y te responderé por correo para preparar una propuesta.',name:'Tu nombre',namePh:'Cómo te llamás',email:'Tu correo electrónico',emailPh:'tucorreo@ejemplo.com',business:'Nombre y tipo de negocio',businessPh:'Ej.: tienda de ropa',service:'¿Qué necesitás?',services:['Calendario de publicaciones de 30 días','Ideas y textos para redes sociales','Otra consulta'],details:'Contame un poco más (opcional)',detailsPh:'Redes sociales, objetivos, presupuesto aproximado…',send:'Enviar consulta',privacy:'Usaremos tu correo solamente para responder esta consulta.'},
  en:{title:'Want a custom plan for your business?',intro:'Tell me what you need and I’ll reply by email with a proposal.',name:'Your name',namePh:'What should we call you?',email:'Your email address',emailPh:'you@example.com',business:'Business name and type',businessPh:'E.g. clothing store',service:'What do you need?',services:['30-day social media calendar','Social media ideas and captions','Other question'],details:'Tell me a little more (optional)',detailsPh:'Social platforms, goals, approximate budget…',send:'Send inquiry',privacy:'Your email will only be used to reply to this inquiry.'},
  pt:{title:'Quer um plano personalizado para seu negócio?',intro:'Conte o que você precisa e responderei por e-mail com uma proposta.',name:'Seu nome',namePh:'Como podemos chamar você?',email:'Seu e-mail',emailPh:'voce@exemplo.com',business:'Nome e tipo de negócio',businessPh:'Ex.: loja de roupas',service:'Do que você precisa?',services:['Calendário de publicações de 30 dias','Ideias e textos para redes sociais','Outra dúvida'],details:'Conte um pouco mais (opcional)',detailsPh:'Redes sociais, objetivos, orçamento aproximado…',send:'Enviar consulta',privacy:'Seu e-mail será usado somente para responder a esta consulta.'}
  };
+ const s=sampleCopy[$('idioma').value]||sampleCopy.es;
+ $('sampleEyebrow').textContent=s.eyebrow;$('sampleTitle').textContent=s.title;$('sampleIntro').textContent=s.intro;
+ for(let i=0;i<3;i++){ $('sampleDay'+(i+1)).textContent=s.days[i];$('sampleText'+(i+1)).textContent=s.texts[i]; }
+ $('sampleDisclaimer').textContent=s.disclaimer;
  const c=contactCopy[$('idioma').value]||contactCopy.es;
  $('contactTitle').textContent=c.title;$('contactIntro').textContent=c.intro;
  $('contactNameLabel').textContent=c.name;$('contactName').placeholder=c.namePh;
