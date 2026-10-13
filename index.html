@@ -32,6 +32,29 @@
 <div class="result" id="calendario" aria-live="polite"></div>
 <div class="actions"><button class="secondary" id="copiar" type="button">Copiar texto</button><button class="secondary" id="descargar" type="button">Descargar mi plan</button></div><button class="secondary" id="reiniciar" type="button">Empezar de nuevo</button>
 <p class="hint">Consejo: agregá fotos reales, precios correctos y datos de contacto. Revisá el texto antes de publicarlo.</p>
+</section>
+<section id="contacto" style="margin-top:18px">
+<h2 id="contactTitle">¿Querés un plan personalizado para tu negocio?</h2>
+<p class="hint" id="contactIntro">Contame qué necesitás y te responderé por correo para preparar una propuesta.</p>
+<form action="https://formsubmit.app/f/buy2mwvs6n" method="POST">
+<input type="hidden" name="_subject" value="Nueva consulta desde Dólar Digital">
+<label for="contactName" id="contactNameLabel">Tu nombre</label>
+<input id="contactName" name="nombre" maxlength="100" autocomplete="name" required placeholder="Cómo te llamás">
+<label for="contactEmail" id="contactEmailLabel">Tu correo electrónico</label>
+<input id="contactEmail" type="email" name="email" maxlength="160" autocomplete="email" required placeholder="tucorreo@ejemplo.com">
+<label for="contactBusiness" id="contactBusinessLabel">Nombre y tipo de negocio</label>
+<input id="contactBusiness" name="negocio" maxlength="160" required placeholder="Ej.: tienda de ropa">
+<label for="contactService" id="contactServiceLabel">¿Qué necesitás?</label>
+<select id="contactService" name="servicio" required>
+<option value="Calendario de publicaciones de 30 días">Calendario de publicaciones de 30 días</option>
+<option value="Ideas y textos para redes sociales">Ideas y textos para redes sociales</option>
+<option value="Otro servicio">Otra consulta</option>
+</select>
+<label for="contactDetails" id="contactDetailsLabel">Contame un poco más (opcional)</label>
+<textarea id="contactDetails" name="detalles" rows="4" maxlength="1500" placeholder="Redes sociales, objetivos, presupuesto aproximado…"></textarea>
+<button class="primary" id="contactSend" type="submit">Enviar consulta</button>
+<p class="hint" id="contactPrivacy">Usaremos tu correo solamente para responder esta consulta.</p>
+</form>
 </section></main>
 <footer>Una herramienta gratuita para impulsar pequeños negocios.</footer>
 <script>
@@ -44,6 +67,20 @@ pt:{hero:'Ideias e textos prontos para adaptar e publicar nas redes sociais do s
 };
 function lang(){return T[$('idioma').value]||T.es}
 function applyLang(){
+ const contactCopy={
+ es:{title:'¿Querés un plan personalizado para tu negocio?',intro:'Contame qué necesitás y te responderé por correo para preparar una propuesta.',name:'Tu nombre',namePh:'Cómo te llamás',email:'Tu correo electrónico',emailPh:'tucorreo@ejemplo.com',business:'Nombre y tipo de negocio',businessPh:'Ej.: tienda de ropa',service:'¿Qué necesitás?',services:['Calendario de publicaciones de 30 días','Ideas y textos para redes sociales','Otra consulta'],details:'Contame un poco más (opcional)',detailsPh:'Redes sociales, objetivos, presupuesto aproximado…',send:'Enviar consulta',privacy:'Usaremos tu correo solamente para responder esta consulta.'},
+ en:{title:'Want a custom plan for your business?',intro:'Tell me what you need and I’ll reply by email with a proposal.',name:'Your name',namePh:'What should we call you?',email:'Your email address',emailPh:'you@example.com',business:'Business name and type',businessPh:'E.g. clothing store',service:'What do you need?',services:['30-day social media calendar','Social media ideas and captions','Other question'],details:'Tell me a little more (optional)',detailsPh:'Social platforms, goals, approximate budget…',send:'Send inquiry',privacy:'Your email will only be used to reply to this inquiry.'},
+ pt:{title:'Quer um plano personalizado para seu negócio?',intro:'Conte o que você precisa e responderei por e-mail com uma proposta.',name:'Seu nome',namePh:'Como podemos chamar você?',email:'Seu e-mail',emailPh:'voce@exemplo.com',business:'Nome e tipo de negócio',businessPh:'Ex.: loja de roupas',service:'Do que você precisa?',services:['Calendário de publicações de 30 dias','Ideias e textos para redes sociais','Outra dúvida'],details:'Conte um pouco mais (opcional)',detailsPh:'Redes sociais, objetivos, orçamento aproximado…',send:'Enviar consulta',privacy:'Seu e-mail será usado somente para responder a esta consulta.'}
+ };
+ const c=contactCopy[$('idioma').value]||contactCopy.es;
+ $('contactTitle').textContent=c.title;$('contactIntro').textContent=c.intro;
+ $('contactNameLabel').textContent=c.name;$('contactName').placeholder=c.namePh;
+ $('contactEmailLabel').textContent=c.email;$('contactEmail').placeholder=c.emailPh;
+ $('contactBusinessLabel').textContent=c.business;$('contactBusiness').placeholder=c.businessPh;
+ $('contactServiceLabel').textContent=c.service;
+ [...$('contactService').options].forEach((o,i)=>o.textContent=c.services[i]);
+ $('contactDetailsLabel').textContent=c.details;$('contactDetails').placeholder=c.detailsPh;
+ $('contactSend').textContent=c.send;$('contactPrivacy').textContent=c.privacy;
  const t=lang(),id=$('idioma').value;
  document.documentElement.lang=id;
  $('hero').textContent=t.hero;$('formTitle').textContent=t.form;
