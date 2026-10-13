@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dólar Digital — Ideas para publicar</title>
+<style>
+:root{color-scheme:light dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+body{margin:0;background:#f3f5f8;color:#182230}
+main{max-width:720px;margin:32px auto;padding:24px}
+section{background:white;border-radius:18px;padding:24px;box-shadow:0 8px 28px #15223812}
+h1{margin-top:0}p{line-height:1.5;color:#465467}
+label{display:block;font-weight:650;margin:16px 0 6px}
+input,select,button,textarea{box-sizing:border-box;width:100%;padding:12px;border:1px solid #cbd3df;border-radius:10px;font:inherit}
+button{background:#1457d9;color:white;border:0;font-weight:700;margin-top:16px;cursor:pointer}
+#resultado{white-space:pre-wrap;background:#f3f5f8;padding:16px;border-radius:10px;margin-top:16px;min-height:60px}
+small{color:#657184}
+</style>
+</head>
+<body>
+<main><section>
+<h1>Ideas para publicar</h1>
+<p>Generá ideas y textos iniciales para redes sociales de un pequeño negocio. Gratis y sin registrarte.</p>
+<label for="negocio">¿Qué negocio tenés?</label>
+<input id="negocio" placeholder="Ej.: ropa deportiva, peluquería, comida casera">
+<label for="objetivo">¿Qué querés lograr?</label>
+<select id="objetivo"><option>Conseguir más ventas</option><option>Generar confianza</option><option>Recibir comentarios</option><option>Presentar una novedad</option></select>
+<label for="red">¿Dónde vas a publicar?</label>
+<select id="red"><option>Instagram</option><option>Facebook</option><option>WhatsApp</option><option>TikTok</option></select>
+<button id="generar">Crear ideas</button>
+<div id="resultado" aria-live="polite">Completá el negocio y tocá “Crear ideas”.</div>
+<button id="copiar" type="button">Copiar texto</button>
+<small>Herramienta inicial gratuita. Revisá y adaptá los textos antes de publicarlos.</small>
+</section></main>
+<script>
+const $=id=>document.getElementById(id);
+$('generar').addEventListener('click',()=>{
+ const negocio=$('negocio').value.trim()||'mi negocio';
+ const objetivo=$('objetivo').value.toLowerCase();
+ const red=$('red').value;
+ $('resultado').textContent=[
+ 'Ideas para '+negocio+' ('+red+')',
+ '',
+ '1. Mostrá tu producto o servicio favorito y contá qué lo hace especial.',
+ '2. Compartí una pregunta frecuente y respondela de forma sencilla.',
+ '3. Publicá una foto del detrás de escena de tu trabajo.',
+ '4. Pedí a tus seguidores que elijan entre dos opciones.',
+ '5. Invitá a conocer tu propuesta con un mensaje claro y amable.',
+ '',
+ 'Texto sugerido:',
+ '¿Buscás '+objetivo+'? En '+negocio+' queremos ayudarte. Escribinos por mensaje y te contamos más. ¡Gracias por acompañarnos!'
+ ].join('\n');
+});
+$('copiar').addEventListener('click',async()=>{
+ const texto=$('resultado').textContent;
+ try{await navigator.clipboard.writeText(texto);$('copiar').textContent='Copiado';}
+ catch(e){const area=document.createElement('textarea');area.value=texto;document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();$('copiar').textContent='Copiado';}
+});
+</script>
+</body>
+</html>
