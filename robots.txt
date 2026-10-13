@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://spvirtual.github.io/dolar-digital/sitemap.xml
