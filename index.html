@@ -124,8 +124,8 @@ function applyLang(){
  $('offerEyebrow').textContent=o.eyebrow;$('offerTitle').textContent=o.title;$('offerIntro').textContent=o.intro;
  $('offerFeatures').innerHTML='';o.features.forEach(item=>{const li=document.createElement('li');li.textContent=item;$('offerFeatures').appendChild(li)});
  $('offerNote').textContent=o.note;$('offerPrice').textContent=o.price;$('offerCta').textContent=o.cta;
- $('toolIntro').textContent=({es:'Completá los datos y obtené cinco ideas más un texto promocional para copiar. Gratis y sin registrarte.',en:'Fill in the details to get five ideas and a promotional caption you can copy. Free, with no sign-up.',pt:'Preencha os dados para receber cinco ideias e um texto promocional para copiar. Grátis e sem cadastro.'})[id]||'Completá los datos y obtené cinco ideas más un texto promocional para copiar. Gratis y sin registrarte.';
  const t=lang(),id=$('idioma').value;
+ $('toolIntro').textContent=({es:'Completá los datos y obtené cinco ideas más un texto promocional para copiar. Gratis y sin registrarte.',en:'Fill in the details to get five ideas and a promotional caption you can copy. Free, with no sign-up.',pt:'Preencha os dados para receber cinco ideias e um texto promocional para copiar. Grátis e sem cadastro.'})[id]||'Completá los datos y obtené cinco ideas más un texto promocional para copiar. Gratis y sin registrarte.';
  document.documentElement.lang=id;
  $('hero').textContent=t.hero;$('formTitle').textContent=t.form;
  document.querySelector('label[for="negocio"]').textContent=t.business;$('negocio').placeholder=t.businessPh;
