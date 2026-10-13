@@ -100,6 +100,13 @@
 <option value="Ideas y textos para redes sociales">Ideas y textos para redes sociales</option>
 <option value="Otro servicio">Otra consulta</option>
 </select>
+<label for="contactPayment" id="contactPaymentLabel">Estado del pago</label>
+<select id="contactPayment" name="estado_pago" required>
+<option value="Aún no pagué">Aún no pagué</option>
+<option value="Ya pagué con PayPal">Ya pagué con PayPal</option>
+</select>
+<label for="contactTransaction" id="contactTransactionLabel">Referencia o ID de transacción (opcional)</label>
+<input id="contactTransaction" name="referencia_pago" maxlength="120" placeholder="ID de transacción de PayPal, si lo tenés">
 <label for="contactDetails" id="contactDetailsLabel">Contame un poco más (opcional)</label>
 <textarea id="contactDetails" name="detalles" rows="4" maxlength="1500" placeholder="Redes sociales, objetivos, presupuesto aproximado…"></textarea>
 <button class="primary" id="contactSend" type="submit">Enviar consulta</button>
@@ -134,7 +141,7 @@ pt:{eyebrow:'Exemplo de conteúdo',title:'Três publicações de exemplo',intro:
 function applyLang(){
  const contactCopy={
  es:{title:'¿Querés un plan personalizado para tu negocio?',intro:'Contame qué necesitás y te responderé por correo para preparar una propuesta.',name:'Tu nombre',namePh:'Cómo te llamás',email:'Tu correo electrónico',emailPh:'tucorreo@ejemplo.com',business:'Nombre y tipo de negocio',businessPh:'Ej.: tienda de ropa',service:'¿Qué necesitás?',services:['Calendario de publicaciones de 30 días','Ideas y textos para redes sociales','Otra consulta'],details:'Contame un poco más (opcional)',detailsPh:'Redes sociales, objetivos, presupuesto aproximado…',send:'Enviar consulta',privacy:'Usaremos tu correo solamente para responder esta consulta.'},
- en:{title:'Want a custom plan for your business?',intro:'Tell me what you need and I’ll reply by email with a proposal.',name:'Your name',namePh:'What should we call you?',email:'Your email address',emailPh:'you@example.com',business:'Business name and type',businessPh:'E.g. clothing store',service:'What do you need?',services:['30-day social media calendar','Social media ideas and captions','Other question'],details:'Tell me a little more (optional)',detailsPh:'Social platforms, goals, approximate budget…',send:'Send inquiry',privacy:'Your email will only be used to reply to this inquiry.'},
+ en:{title:'Want a custom plan for your business?',intro:'Tell me what you need and I’ll reply by email with a proposal.',name:'Your name',namePh:'What should we call you?',email:'Your email address',emailPh:'you@example.com',business:'Business name and type',businessPh:'E.g. clothing store',service:'What do you need?',services:['30-day social media calendar','Social media ideas and captions','Other question'],payment:'Payment status',paymentOptions:['Not paid yet','Already paid with PayPal'],transaction:'Payment reference or transaction ID (optional)',transactionPh:'PayPal transaction ID, if available',details:'Tell me a little more (optional)',detailsPh:'Social platforms, goals, approximate budget…',send:'Send inquiry',privacy:'Your email will only be used to reply to this inquiry.'},
  pt:{title:'Quer um plano personalizado para seu negócio?',intro:'Conte o que você precisa e responderei por e-mail com uma proposta.',name:'Seu nome',namePh:'Como podemos chamar você?',email:'Seu e-mail',emailPh:'voce@exemplo.com',business:'Nome e tipo de negócio',businessPh:'Ex.: loja de roupas',service:'Do que você precisa?',services:['Calendário de publicações de 30 dias','Ideias e textos para redes sociais','Outra dúvida'],details:'Conte um pouco mais (opcional)',detailsPh:'Redes sociais, objetivos, orçamento aproximado…',send:'Enviar consulta',privacy:'Seu e-mail será usado somente para responder a esta consulta.'}
  };
  const s=sampleCopy[$('idioma').value]||sampleCopy.es;
@@ -148,6 +155,9 @@ function applyLang(){
  $('contactBusinessLabel').textContent=c.business;$('contactBusiness').placeholder=c.businessPh;
  $('contactServiceLabel').textContent=c.service;
  [...$('contactService').options].forEach((o,i)=>o.textContent=c.services[i]);
+ $('contactPaymentLabel').textContent=c.payment;
+ [...$('contactPayment').options].forEach((o,i)=>o.textContent=c.paymentOptions[i]);
+ $('contactTransactionLabel').textContent=c.transaction;$('contactTransaction').placeholder=c.transactionPh;
  $('contactDetailsLabel').textContent=c.details;$('contactDetails').placeholder=c.detailsPh;
  $('contactSend').textContent=c.send;$('contactPrivacy').textContent=c.privacy;
  const faqCopy={
