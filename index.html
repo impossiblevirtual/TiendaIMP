@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#10213b">
-<title>Dólar Digital — Publicaciones para tu negocio</title>
+<title>Sepce Studio — Contenido para tu negocio</title>
 <style>
 :root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#17243b;background:#f3f6fb}
 *{box-sizing:border-box}body{margin:0}header{background:linear-gradient(135deg,#10213b,#1758ba);color:white;padding:34px 18px 42px}header div,main{max-width:760px;margin:auto}header p{color:#e0eaff;line-height:1.5;margin-bottom:0}header h1{margin:0;font-size:clamp(1.8rem,5vw,2.5rem)}main{padding:0 16px 36px;margin-top:-20px}section{background:white;border:1px solid #e2e8f0;border-radius:18px;padding:22px;box-shadow:0 12px 30px #10213b12}label{display:block;font-weight:700;margin:15px 0 6px}input,select,button{width:100%;padding:12px 13px;border:1px solid #cbd5e1;border-radius:10px;font:inherit}input:focus,select:focus{outline:2px solid #9abaff;border-color:#3974df}.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.hint{font-size:.88rem;color:#64748b;line-height:1.5}.primary{background:#1758ba;color:white;border:0;font-weight:750;margin-top:20px;cursor:pointer}.secondary{background:white;color:#1758ba;border:1px solid #1758ba;font-weight:700;cursor:pointer}.primary:hover{background:#124795}.result{margin-top:18px}.result h2{font-size:1.1rem}.post{white-space:pre-wrap;background:#f5f8fd;border:1px solid #e1e9f5;padding:15px;border-radius:12px;line-height:1.55;overflow-wrap:anywhere}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions button{margin-top:12px}footer{text-align:center;color:#64748b;font-size:.85rem;padding:0 20px 26px}@media(max-width:520px){.grid{grid-template-columns:1fr}section{padding:18px}}
 </style>
 </head>
 <body>
-<header><div><h1>Dólar Digital</h1><p id="hero">Ideas y textos listos para adaptar y publicar en las redes de tu negocio.</p></div></header>
+<header><div><h1>Sepce Studio</h1><p id="hero">Ideas y textos listos para adaptar y publicar en las redes de tu negocio.</p></div></header>
 <main><section>
 <label for="idioma" id="labelIdioma">Idioma / Language / Idioma</label><select id="idioma"><option value="es">Español</option><option value="en">English</option><option value="pt">Português</option></select>
 <h2 id="formTitle">Creá tu publicación</h2>
@@ -37,7 +37,7 @@
 <h2 id="contactTitle">¿Querés un plan personalizado para tu negocio?</h2>
 <p class="hint" id="contactIntro">Contame qué necesitás y te responderé por correo para preparar una propuesta.</p>
 <form action="https://formsubmit.app/f/buy2mwvs6n" method="POST">
-<input type="hidden" name="_subject" value="Nueva consulta desde Dólar Digital">
+<input type="hidden" name="_subject" value="Nueva consulta desde Sepce Studio">
 <label for="contactName" id="contactNameLabel">Tu nombre</label>
 <input id="contactName" name="nombre" maxlength="100" autocomplete="name" required placeholder="Cómo te llamás">
 <label for="contactEmail" id="contactEmailLabel">Tu correo electrónico</label>
@@ -124,7 +124,7 @@ $('descargar').addEventListener('click',()=>{
  const contenido=[textoCompleto,planSemanal].filter(Boolean).join('\n\n------------------------------\n\n'),t=lang();
  if(!contenido){$('descargar').textContent=t.first;setTimeout(()=>$('descargar').textContent=t.download,1600);return}
  const blob=new Blob([contenido],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download='dolar-digital-content-plan.txt';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+ a.href=url;a.download='sepce-studio-content-plan.txt';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
 });
 $('copiar').addEventListener('click',async()=>{
  const t=lang();if(!textoCompleto&&!planSemanal){$('copiar').textContent=t.copiedNeed;setTimeout(()=>$('copiar').textContent=t.copy,1600);return}
