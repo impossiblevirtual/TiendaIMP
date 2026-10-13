@@ -26,14 +26,17 @@
 <label for="tono">Estilo del mensaje</label>
 <select id="tono"><option value="cercano">Cercano y amigable</option><option value="profesional">Profesional</option><option value="entusiasta">Entusiasta</option><option value="directo">Directo y breve</option></select>
 <button class="primary" id="generar">Crear mis ideas</button>
+<button class="secondary" id="planificar" type="button">Crear calendario de 7 días</button>
 <div class="result" id="resultado" aria-live="polite"><p class="hint">Tus ideas aparecerán acá.</p></div>
-<div class="actions"><button class="secondary" id="copiar" type="button">Copiar texto</button><button class="secondary" id="reiniciar" type="button">Empezar de nuevo</button></div>
+<div class="result" id="calendario" aria-live="polite"></div>
+<div class="actions"><button class="secondary" id="copiar" type="button">Copiar texto</button><button class="secondary" id="descargar" type="button">Descargar mi plan</button></div><button class="secondary" id="reiniciar" type="button">Empezar de nuevo</button>
 <p class="hint">Consejo: agregá fotos reales, precios correctos y datos de contacto. Revisá el texto antes de publicarlo.</p>
 </section></main>
 <footer>Una herramienta gratuita para impulsar pequeños negocios.</footer>
 <script>
 const $=id=>document.getElementById(id);
 let textoCompleto='';
+let planSemanal='';
 $('generar').addEventListener('click',()=>{
  const negocio=$('negocio').value.trim()||'mi negocio';
  const objetivo=$('objetivo').value;
@@ -57,6 +60,21 @@ $('generar').addEventListener('click',()=>{
  const list=document.createElement('ol');ideas.forEach(idea=>{const li=document.createElement('li');li.textContent=idea;li.style.marginBottom='8px';list.appendChild(li)});$('resultado').appendChild(list);
  const title=document.createElement('h2');title.textContent='Texto sugerido para '+red;$('resultado').appendChild(title);
  const p=document.createElement('div');p.className='post';p.textContent=post;$('resultado').appendChild(p);
+});
+$('planificar').addEventListener('click',()=>{
+ const negocio=$('negocio').value.trim()||'mi negocio', oferta=$('oferta').value.trim(), red=$('red').value, objetivo=$('objetivo').value;
+ const dias=[['Lunes','Presentación','Mostrá quién está detrás de '+negocio+' y qué ofrecés.'],['Martes','Producto o servicio','Presentá tu producto o servicio destacado'+(oferta?' y mencioná '+oferta:'')+'.'],['Miércoles','Consejo útil','Compartí un consejo sencillo relacionado con lo que vendés.'],['Jueves','Confianza','Respondé una pregunta frecuente o compartí un comentario real de un cliente, con su permiso.'],['Viernes','Invitación','Invitá a consultar precios, disponibilidad o detalles por mensaje.'],['Sábado','Participación','Hacé una pregunta o encuesta para conocer las preferencias de tus seguidores.'],['Domingo','Resumen','Recordá lo más importante de la semana y adelantá lo que viene.']];
+ const llamados={vender:'Escribinos para consultar y hacer tu pedido.',confianza:'Consultanos sin compromiso; te respondemos tus dudas.',interaccion:'Te leemos en los comentarios: ¿qué opinás?',novedad:'Escribinos y te contamos todos los detalles.'};
+ planSemanal='CALENDARIO DE 7 DÍAS — '+negocio+' ('+red+')\n\n'+dias.map((d,i)=>(i+1)+'. '+d[0]+' — '+d[1]+'\n'+d[2]+'\n'+llamados[objetivo]).join('\n\n');
+ const cont=$('calendario');cont.innerHTML='';const h=document.createElement('h2');h.textContent='Tu calendario semanal';cont.appendChild(h);
+ const p=document.createElement('p');p.className='hint';p.textContent='Usalo como guía y adaptá cada idea a tu negocio.';cont.appendChild(p);
+ dias.forEach((d,i)=>{const card=document.createElement('div');card.className='post';card.style.marginBottom='10px';card.textContent=d[0]+' · '+d[1]+'\n'+d[2]+'\nSugerencia: '+llamados[objetivo];cont.appendChild(card)});
+});
+$('descargar').addEventListener('click',()=>{
+ const contenido=[textoCompleto,planSemanal].filter(Boolean).join('\n\n------------------------------\n\n');
+ if(!contenido){$('descargar').textContent='Primero creá contenido';return}
+ const blob=new Blob([contenido],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='plan-contenidos.txt';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
 });
 $('copiar').addEventListener('click',async()=>{
  if(!textoCompleto){$('copiar').textContent='Primero creá tus ideas';setTimeout(()=>$('copiar').textContent='Copiar texto',1600);return}
