@@ -26,36 +26,36 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://spvirtual.github.io/dolar-digital/#organization","name":"Sepce Studio","url":"https://spvirtual.github.io/dolar-digital/","description":"Planejamento de conteúdo para redes sociais de pequenos negócios, com atendimento em português, espanhol e inglês."},{"@type":"WebSite","@id":"https://spvirtual.github.io/dolar-digital/#website","url":"https://spvirtual.github.io/dolar-digital/","name":"Sepce Studio","inLanguage":["es","en","pt"],"publisher":{"@id":"https://spvirtual.github.io/dolar-digital/#organization"}},{"@type":"WebPage","@id":"https://spvirtual.github.io/dolar-digital/pt/#webpage","url":"https://spvirtual.github.io/dolar-digital/pt/","name":"Sepce Studio — Conteúdo para seu negócio","description":"Ideias gratuitas para redes sociais e calendários de conteúdo personalizados para pequenos negócios. Disponível em português, espanhol e inglês.","inLanguage":"pt","isPartOf":{"@id":"https://spvirtual.github.io/dolar-digital/#website"},"publisher":{"@id":"https://spvirtual.github.io/dolar-digital/#organization"}}]}</script>
 </head>
 <body>
-<header><div><h1>Sepce Studio</h1><p id="hero">Ideas y textos listos para adaptar y publicar en las redes de tu negocio.</p></div></header>
+<header><div><h1>Sepce Studio</h1><p id="hero">Ideias práticas e legendas que você pode adaptar às redes sociais do seu negócio.</p></div></header>
 <main><section>
 <label for="idioma" id="labelIdioma">Idioma / Language / Idioma</label><select id="idioma"><option value="es">Español</option><option value="en">English</option><option value="pt" selected>Português</option></select>
-<h2 id="formTitle">Creá tu publicación</h2>
-<p class="hint" id="toolIntro">Completá los datos y obtené cinco ideas más un texto promocional para copiar. Gratis y sin registrarte.</p>
-<label for="negocio">¿Qué negocio tenés?</label>
-<input id="negocio" maxlength="80" placeholder="Ej.: ropa deportiva, peluquería, comida casera">
+<h2 id="formTitle">Crie sua publicação</h2>
+<p class="hint" id="toolIntro">Preencha os dados para receber cinco ideias e um texto promocional para copiar. Grátis e sem cadastro.</p>
+<label for="negocio">Que tipo de negócio você tem?</label>
+<input id="negocio" maxlength="80" placeholder="Ex.: roupas esportivas, salão de beleza, comida caseira">
 <div class="grid">
-<div><label for="objetivo">Objetivo</label><select id="objetivo"><option value="vender">Conseguir más ventas</option><option value="confianza">Generar confianza</option><option value="interaccion">Recibir comentarios</option><option value="novedad">Presentar una novedad</option></select></div>
-<div><label for="red">Red social</label><select id="red"><option>Instagram</option><option>Facebook</option><option>WhatsApp</option><option>TikTok</option></select></div>
+<div><label for="objetivo">Objetivo</label><select id="objetivo"><option value="vender">Conseguir mais vendas</option><option value="confianza">Gerar confiança</option><option value="interaccion">Receber comentários</option><option value="novedad">Apresentar uma novidade</option></select></div>
+<div><label for="red">Rede social</label><select id="red"><option>Instagram</option><option>Facebook</option><option>WhatsApp</option><option>TikTok</option></select></div>
 </div>
-<label for="oferta">Producto, servicio u oferta (opcional)</label>
-<input id="oferta" maxlength="120" placeholder="Ej.: 2x1 en camisetas hasta el viernes">
-<label for="tono">Estilo del mensaje</label>
-<select id="tono"><option value="cercano">Cercano y amigable</option><option value="profesional">Profesional</option><option value="entusiasta">Entusiasta</option><option value="directo">Directo y breve</option></select>
-<button class="primary" id="generar">Crear mis ideas</button>
-<button class="secondary" id="planificar" type="button">Crear calendario de 7 días</button>
-<div class="result" id="resultado" aria-live="polite"><p class="hint">Tus ideas aparecerán acá.</p></div>
+<label for="oferta">Produto, serviço ou oferta (opcional)</label>
+<input id="oferta" maxlength="120" placeholder="Ex.: promoção em camisetas até sexta-feira">
+<label for="tono">Tom da mensagem</label>
+<select id="tono"><option value="cercano">Próximo e amigável</option><option value="profesional">Profissional</option><option value="entusiasta">Entusiasmado</option><option value="directo">Direto e breve</option></select>
+<button class="primary" id="generar">Criar minhas ideias</button>
+<button class="secondary" id="planificar" type="button">Criar plano de 7 dias</button>
+<div class="result" id="resultado" aria-live="polite"><p class="hint">Suas ideias aparecerão aqui.</p></div>
 <div class="result" id="calendario" aria-live="polite"></div>
-<div class="actions"><button class="secondary" id="copiar" type="button">Copiar texto</button><button class="secondary" id="descargar" type="button">Descargar mi plan</button></div><button class="secondary" id="reiniciar" type="button">Empezar de nuevo</button>
+<div class="actions"><button class="secondary" id="copiar" type="button">Copiar texto</button><button class="secondary" id="descargar" type="button">Baixar meu plano</button></div><button class="secondary" id="reiniciar" type="button">Recomeçar</button>
 <p class="hint">Dica: use fotos reais, preços corretos e dados de contato. Revise o texto antes de publicar.</p>
 </section>
 <section id="muestra" class="offer" style="margin-top:18px">
-<p class="eyebrow" id="sampleEyebrow">Ejemplo de contenido</p>
-<h2 id="sampleTitle">Tres publicaciones de ejemplo</h2>
-<p id="sampleIntro">Ejemplo ilustrativo para una panadería ficticia. Adaptamos cada calendario al rubro, los productos y el tono de cada negocio.</p>
-<div class="post" style="margin-bottom:10px"><strong id="sampleDay1">1. Producto destacado</strong><p id="sampleText1">🥐 ¿Ya elegiste algo rico para acompañar el mate? Hoy te esperamos con opciones recién preparadas. Escribinos para consultar variedades y disponibilidad.</p></div>
-<div class="post" style="margin-bottom:10px"><strong id="sampleDay2">2. Detrás de escena</strong><p id="sampleText2">El secreto está en los pequeños detalles: preparación, dedicación y productos hechos con cuidado. ¿Qué te gustaría ver en nuestra próxima publicación?</p></div>
-<div class="post"><strong id="sampleDay3">3. Invitación</strong><p id="sampleText3">¿Tenés una reunión o querés darte un gusto? Consultanos por mensaje y te ayudamos a elegir. ¡Te leemos!</p></div>
-<p class="hint" id="sampleDisclaimer">Muestra ilustrativa: no corresponde a un cliente real.</p>
+<p class="eyebrow" id="sampleEyebrow">Exemplo de conteúdo</p>
+<h2 id="sampleTitle">Três publicações de exemplo</h2>
+<p id="sampleIntro">Exemplo ilustrativo para uma padaria fictícia. Cada calendário é adaptado ao setor, aos produtos e ao tom de cada negócio.</p>
+<div class="post" style="margin-bottom:10px"><strong id="sampleDay1">1. Produto em destaque</strong><p id="sampleText1">🥐 Quer algo gostoso para hoje? Pergunte pelas opções preparadas na hora e pela disponibilidade.</p></div>
+<div class="post" style="margin-bottom:10px"><strong id="sampleDay2">2. Bastidores</strong><p id="sampleText2">Os pequenos detalhes fazem a diferença: preparo cuidadoso, dedicação e atenção. O que você gostaria de ver na próxima publicação?</p></div>
+<div class="post"><strong id="sampleDay3">3. Convite</strong><p id="sampleText3">Vai reunir amigos ou quer se presentear? Envie uma mensagem e ajudamos você a escolher.</p></div>
+<p class="hint" id="sampleDisclaimer">Exemplo ilustrativo; não é um trabalho realizado para um cliente real.</p>
 </section>
 <section id="portfolio" class="offer" style="margin-top:18px">
 <p class="eyebrow">Portfólio · Exemplo de calendário</p>
@@ -68,11 +68,11 @@
 <p class="hint">Exemplos ilustrativos; não são trabalhos de clientes reais.</p>
 </section>
 <section id="ofertaServicio" class="offer">
-<p class="eyebrow" id="offerEyebrow">Servicio personalizado</p>
-<h2 id="offerTitle">Un mes de contenido para tu negocio</h2>
-<p id="offerIntro">Recibí un calendario de 30 días con ideas y textos adaptados a tu negocio, para que planifiques tus publicaciones con más claridad.</p>
-<ul id="offerFeatures"><li>30 ideas de publicaciones organizadas por día.</li><li>Textos y llamadas a la acción adaptados a tu rubro.</li><li>Orientación para promocionar productos y servicios.</li><li>Entrega digital, lista para revisar y adaptar.</li></ul>
-<p class="hint" id="offerNote">Precio de lanzamiento para el servicio descrito. Si necesitás un alcance diferente, consultanos antes de pagar.</p>
+<p class="eyebrow" id="offerEyebrow">Serviço personalizado</p>
+<h2 id="offerTitle">Um mês de conteúdo para seu negócio</h2>
+<p id="offerIntro">Receba um calendário de 30 dias com ideias e textos adaptados ao seu negócio para planejar suas publicações com mais clareza.</p>
+<ul id="offerFeatures"><li>30 ideias de publicações organizadas por dia.</li><li>Textos e chamadas para ação adaptados ao seu setor.</li><li>Orientações para divulgar produtos e serviços.</li><li>Entrega digital para revisar e adaptar.</li></ul>
+<p class="hint" id="offerNote">Preço promocional único para o serviço descrito. Se precisar de outro escopo, fale conosco antes de pagar.</p>
 <div class="offer-price" id="offerPrice">Preço único: US$ 15 · pagamento pelo PayPal</div>
 <a class="primary" id="offerCta" href="#contacto" style="display:block;text-align:center;text-decoration:none;padding:12px 13px;border-radius:10px;margin-top:20px">Consultar meu calendário</a>
 <a class="primary" id="payCta" href="https://www.paypal.com/ncp/payment/CABG59CNQJHMU" target="_blank" rel="noopener noreferrer" style="display:block;text-align:center;text-decoration:none;padding:12px 13px;border-radius:10px;margin-top:10px;background:#ffc439;color:#17243b">Pagar com PayPal · US$ 15</a>
