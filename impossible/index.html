@@ -46,11 +46,17 @@ section{padding:55px 0}.section-head{max-width:720px;margin-bottom:26px}.section
 </main><footer><span>© 2026 Impossible Indumentaria</span><span>Indumentaria deportiva personalizada · Argentina</span><a class="insta" href="https://www.instagram.com/impossible.indumentaria/" target="_blank" rel="noopener noreferrer">@impossible.indumentaria</a></footer>
 </div>
 <script>
-const catalog=[
-{group:"Camisetas, musculosas y shorts · Jersey Set",items:[["Conjunto (camiseta/musculosa + short)",25000],["Conjunto bordado",27000],["Conjunto con short con bolsillo",26000],["Conjunto bordado con short con bolsillo",28000],["Short",15000],["Short con bolsillo",16000],["Short bordado",16500],["Short bordado con bolsillo",17500],["Camiseta o musculosa",17000],["Camiseta o musculosa bordada",19000]]},
-{group:"Buzos, camperas y pantalones · Keten",items:[["Conjunto buzo + pantalón",40000],["Conjunto campera + pantalón",41000],["Conjunto buzo + pantalón bordado",42000],["Conjunto campera + pantalón bordado",43000],["Campera",30000],["Campera bordada",32000],["Buzo",28000],["Buzo bordado",29000],["Pantalón",26000],["Pantalón bordado",27000]]},
-{group:"Rompevientos · Taslan",items:[["Rompevientos reversible",44000],["Rompevientos simple",30000],["Rompevientos reversible + escudo bordado",47000],["Rompevientos simple + escudo bordado",33000]]},
-{group:"Banderas",items:[["Bandera 1 × 1,5 m",33000],["Bandera 2 × 1,5 m",49000],["Bandera 3 × 1,5 m",60000],["Bandera de más de 3 m (precio por metro)",20000]]}
+const categories=[
+ {name:"Camiseta",options:[["Simple",17000],["Bordada",19000]]},
+ {name:"Musculosa",options:[["Simple",17000],["Bordada",19000]]},
+ {name:"Short",options:[["Simple",15000],["Bordado",16500],["Simple con bolsillo",16000],["Bordado con bolsillo",17500]]},
+ {name:"Camiseta + short",options:[["Simple",25000],["Bordado",27000],["Simple + short con bolsillo",26000],["Bordado + short con bolsillo",28000]]},
+ {name:"Musculosa + short",options:[["Simple",25000],["Bordado",27000],["Simple + short con bolsillo",26000],["Bordado + short con bolsillo",28000]]},
+ {name:"Buzo",options:[["Simple",28000],["Bordado",29000]]},
+ {name:"Pantalón",options:[["Simple",26000],["Bordado",27000]]},
+ {name:"Campera",options:[["Simple",30000],["Bordada",32000]]},
+ {name:"Rompeviento",options:[["Simple",30000],["Simple bordado",33000],["Reversible",44000],["Reversible bordado",47000]]},
+ {name:"Bandera",options:[["1 × 1,5 m",33000],["2 × 1,5 m",49000],["3 × 1,5 m",60000],["4 × 1,5 m",80000],["5 × 1,5 m",100000]]}
 ];
 const rows=document.getElementById("calc-rows");
 const money=n=>new Intl.NumberFormat("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:0}).format(n);
@@ -59,19 +65,20 @@ function addRow(){
  const productStep=document.createElement("div");productStep.className="product-step";
  const stepLabel=document.createElement("label");stepLabel.className="step-label";stepLabel.textContent="1. ELEGÍ LA PRENDA";
  const product=document.createElement("select");product.className="product-select";product.setAttribute("aria-label","Elegí la prenda");
- catalog.forEach((g,gi)=>{const og=document.createElement("optgroup");og.label=g.group;g.items.forEach((it,ii)=>{const o=document.createElement("option");o.value=gi+"-"+ii;o.textContent=it[0];og.appendChild(o)});product.appendChild(og)});
- stepLabel.htmlFor="";productStep.append(stepLabel,product);
+ const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Seleccioná una prenda…";placeholder.disabled=true;placeholder.selected=true;product.appendChild(placeholder);
+ categories.forEach((cat,index)=>{const o=document.createElement("option");o.value=String(index);o.textContent=cat.name;product.appendChild(o)});
+ productStep.append(stepLabel,product);
  const details=document.createElement("div");details.className="details-row";
- const variantWrap=document.createElement("label");variantWrap.className="detail-field";const variantLabel=document.createElement("span");variantLabel.className="field-label";variantLabel.textContent="2. Variante / extra";
- const variant=document.createElement("select");variant.setAttribute("aria-label","Variante o detalle");variantWrap.append(variantLabel,variant);
+ const variantWrap=document.createElement("label");variantWrap.className="detail-field";const variantLabel=document.createElement("span");variantLabel.className="field-label";variantLabel.textContent="2. ELEGÍ EL TIPO";
+ const variant=document.createElement("select");variant.setAttribute("aria-label","Elegí el tipo");variant.disabled=true;const vPlaceholder=document.createElement("option");vPlaceholder.value="";vPlaceholder.textContent="Primero elegí la prenda";variant.appendChild(vPlaceholder);variantWrap.append(variantLabel,variant);
  const qtyWrap=document.createElement("label");qtyWrap.className="detail-field";const qtyLabel=document.createElement("span");qtyLabel.className="field-label";qtyLabel.textContent="Cantidad";
  const qty=document.createElement("input");qty.type="number";qty.min="1";qty.step="1";qty.value="1";qty.setAttribute("aria-label","Cantidad");qtyWrap.append(qtyLabel,qty);
  const priceWrap=document.createElement("div");priceWrap.className="detail-field";const priceLabel=document.createElement("span");priceLabel.className="field-label";priceLabel.textContent="Costo de esta selección";
- const price=document.createElement("strong");price.className="price-cell";price.textContent=money(25000);priceWrap.append(priceLabel,price);
+ const price=document.createElement("strong");price.className="price-cell";price.textContent="—";priceWrap.append(priceLabel,price);
  const remove=document.createElement("button");remove.type="button";remove.className="remove";remove.textContent="×";remove.setAttribute("aria-label","Quitar prenda");remove.title="Quitar esta prenda";
- function fillVariant(){variant.innerHTML="";const o=document.createElement("option");o.value="base";o.textContent="Precio publicado";variant.appendChild(o);if(product.value==="2-0"||product.value==="2-1"){const ex=document.createElement("option");ex.value="bordado";ex.textContent="Agregar bordado de escudo (+$3.000)";variant.appendChild(ex)}}
- function update(){fillVariant();const [gi,ii]=product.value.split("-").map(Number);let unit=catalog[gi].items[ii][1];if(variant.value==="bordado")unit+=3000;const q=Math.max(1,parseInt(qty.value||"1",10));price.textContent=money(unit*q);row.dataset.amount=String(unit*q);updateTotals()}
- product.addEventListener("change",update);variant.addEventListener("change",update);qty.addEventListener("input",update);remove.addEventListener("click",()=>{row.remove();if(!rows.children.length)addRow();updateTotals()});
+ function fillVariants(){variant.innerHTML="";const ph=document.createElement("option");ph.value="";ph.textContent="Seleccioná el tipo…";ph.disabled=true;ph.selected=true;variant.appendChild(ph);if(product.value!==""){categories[Number(product.value)].options.forEach((item,index)=>{const o=document.createElement("option");o.value=String(index);o.textContent=item[0]+" — "+money(item[1]);variant.appendChild(o)});variant.disabled=false}else{variant.disabled=true;const o=document.createElement("option");o.textContent="Primero elegí la prenda";variant.appendChild(o)}}
+ function update(){if(product.value===""||variant.value===""){price.textContent="—";row.dataset.amount="0";updateTotals();return}const cat=categories[Number(product.value)];const item=cat.options[Number(variant.value)];const q=Math.max(1,parseInt(qty.value||"1",10));price.textContent=money(item[1]*q);row.dataset.amount=String(item[1]*q);updateTotals()}
+ product.addEventListener("change",()=>{fillVariants();update()});variant.addEventListener("change",update);qty.addEventListener("input",update);remove.addEventListener("click",()=>{row.remove();if(!rows.children.length)addRow();updateTotals()});
  details.append(variantWrap,qtyWrap,priceWrap,remove);row.append(productStep,details);rows.appendChild(row);update();
 }
 function updateTotals(){let total=0;[...rows.children].forEach(r=>total+=Number(r.dataset.amount||0));document.getElementById("grand-total").textContent=money(total);document.getElementById("deposit").textContent=money(Math.round(total/2));document.getElementById("balance").textContent=money(total-Math.round(total/2))}
