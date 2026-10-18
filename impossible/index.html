@@ -148,7 +148,9 @@ document.getElementById("order-send-whatsapp").addEventListener("click",()=>{
  if(typeof XLSX==="undefined"){alert("No se pudo cargar el generador de Excel. Revisá tu conexión e intentá de nuevo.");return}
  const details=[["IMPOSSIBLE INDUMENTARIA — PEDIDO"],["Fecha",new Date().toLocaleDateString("es-AR")],[],["Prenda","Tipo","Moldería","Talle","Cantidad","Precio unitario estimado","Subtotal estimado"]];
  chosen.forEach(p=>p.sizes.forEach(s=>details.push([p.product,p.type,p.mold,s.size,s.qty,p.unitPrice,s.qty*p.unitPrice])));
- details.push([],["TOTAL DE UNIDADES",chosen.reduce((n,p)=>n+p.qty,0)],["TOTAL ESTIMADO (ARS)",chosen.reduce((n,p)=>n+p.amount,0)],["SEÑA ESTIMADA 50% (ARS)",Math.round(chosen.reduce((n,p)=>n+p.amount,0)/2)],[],["Nota","Importes estimados sujetos a confirmación de disponibilidad y precio final."]]);
+ const totalUnits=chosen.reduce((n,p)=>n+p.qty,0);
+  const totalAmount=chosen.reduce((n,p)=>n+p.amount,0);
+  details.push([],["TOTAL DE UNIDADES",totalUnits],["TOTAL ESTIMADO (ARS)",totalAmount],["SEÑA ESTIMADA 50% (ARS)",Math.round(totalAmount/2)],[],["Nota","Importes estimados sujetos a confirmación de disponibilidad y precio final."]);
  const wb=XLSX.utils.book_new();const ws=XLSX.utils.aoa_to_sheet(details);
  ws["!cols"]=[{wch:24},{wch:27},{wch:16},{wch:10},{wch:12},{wch:24},{wch:23}];
  XLSX.utils.book_append_sheet(wb,ws,"Pedido");
