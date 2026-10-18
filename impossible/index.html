@@ -145,6 +145,8 @@ document.getElementById("order-send-whatsapp").addEventListener("click",()=>{
    }
  });
  if(!chosen.length){alert("Cargá al menos una cantidad por talle antes de preparar el pedido.");return}
+ const requestedUnits=chosen.reduce((n,p)=>n+p.qty,0);
+ if(requestedUnits<10){alert("El pedido mínimo de Impossible Indumentaria es de 10 prendas. Actualmente cargaste "+requestedUnits+". Agregá "+(10-requestedUnits)+" prenda(s) más para poder preparar el Excel y continuar por WhatsApp.");return}
  if(typeof XLSX==="undefined"){alert("No se pudo cargar el generador de Excel. Revisá tu conexión e intentá de nuevo.");return}
  const details=[["IMPOSSIBLE INDUMENTARIA — PEDIDO"],["Fecha",new Date().toLocaleDateString("es-AR")],[],["Prenda","Tipo","Moldería","Talle","Cantidad","Precio unitario estimado","Subtotal estimado"]];
  chosen.forEach(p=>p.sizes.forEach(s=>details.push([p.product,p.type,p.mold,s.size,s.qty,p.unitPrice,s.qty*p.unitPrice])));
