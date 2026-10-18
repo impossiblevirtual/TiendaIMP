@@ -48,7 +48,7 @@ section{padding:55px 0}.section-head{max-width:720px;margin-bottom:26px}.section
 <section id="calculadora"><div class="section-head"><div class="tag">06 / Calculadora de pedido</div><h2>Calculá tu pedido y la seña.</h2><p>Agregá todos los tipos de prendas que quieras, indicá la cantidad y mirá el subtotal por producto, el total y la seña estimada del 50%.</p></div><div class="calculator"><div class="calc-labels"><span>Prenda</span><span>Variante</span><span>Cantidad</span><span>Importe</span><span></span></div><div id="calc-rows"></div><div class="calc-actions"><button class="btn" type="button" id="add-row">+ Agregar otra prenda</button><button class="btn" type="button" id="reset-calc">Reiniciar</button></div><div class="calc-summary"><div class="totalbox"><span>Total del pedido</span><strong id="grand-total">$0</strong></div><div class="totalbox"><span>Seña estimada (50%)</span><strong id="deposit">$0</strong></div><div class="totalbox"><span>Saldo restante</span><strong id="balance">$0</strong></div></div><p class="fineprint">La calculadora usa los precios publicados en esta página y calcula la seña sobre el total estimado. No incluye cambios de diseño, envío ni extras que no estén seleccionados. Confirmá el presupuesto final con Impossible antes de pagar.</p></div></section>
 
 <section id="arma-tu-pedido"><div class="section-head"><div class="tag">07 / Armá tu pedido</div><h2>Elegí prendas, moldería y talles.</h2><p>Agregá las prendas que necesitás, seleccioná el tipo y la moldería, y cargá cuántas unidades querés de cada talle. Las medidas están expresadas en centímetros como ancho × alto o largo, según la prenda.</p></div>
-<div class="calculator order-builder"><div id="order-rows"></div><div class="calc-actions"><button class="btn" type="button" id="order-add">+ Agregar prenda</button><button class="btn" type="button" id="order-reset">Reiniciar pedido</button></div><div class="calc-summary"><div class="totalbox"><span>Unidades totales</span><strong id="order-count">0</strong></div><div class="totalbox"><span>Total estimado</span><strong id="order-total">$0</strong></div><div class="totalbox"><span>Seña estimada (50%)</span><strong id="order-deposit">$0</strong></div></div><p class="fineprint">El pedido es una estimación y no se envía automáticamente. Confirmaremos disponibilidad, medidas y precio final antes de producir.</p></div>
+<div class="calculator order-builder"><div id="order-rows"></div><div class="calc-actions"><button class="btn" type="button" id="order-add">+ Agregar prenda</button><button class="btn" type="button" id="order-reset">Reiniciar pedido</button></div><div class="calc-summary"><div class="totalbox"><span>Unidades totales</span><strong id="order-count">0</strong></div><div class="totalbox"><span>Total estimado</span><strong id="order-total">$0</strong></div><div class="totalbox"><span>Seña estimada (50%)</span><strong id="order-deposit">$0</strong></div></div><div class="calc-actions order-send-actions"><button class="btn primary" type="button" id="order-send-whatsapp">Preparar Excel y enviar por WhatsApp ↗</button></div><p class="fineprint">Al terminar, se descarga una hoja Excel con el detalle y se abre WhatsApp con el mensaje preparado. Adjuntá el Excel descargado al chat antes de enviarlo. El pedido es una estimación; confirmaremos disponibilidad y precio final.</p></div>
 <div class="section-head size-head"><div class="tag">Guía de talles</div><h2>Consultá las medidas antes de elegir.</h2><p>Medidas en centímetros. Revisá la tabla correspondiente a la prenda y la moldería elegida.</p></div>
 <div class="size-tables">
 <div class="price-group"><h3>Camisetas y musculosas · Moldería masculina</h3><div class="table-wrap"><table><thead><tr><th>Talle</th><th>Ancho</th><th>Alto</th></tr></thead><tbody>
@@ -68,6 +68,7 @@ section{padding:55px 0}.section-head{max-width:720px;margin-bottom:26px}.section
 <section id="contacto"><div class="contact"><div><div class="tag">08 / Contacto</div><h2>Tu próximo equipo<br>empieza acá.</h2><p>Consultanos por diseños, disponibilidad y pedidos personalizados.</p></div><div class="actions"><a class="btn primary" href="https://wa.me/5492914710231" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a><a class="btn" href="https://www.instagram.com/impossible.indumentaria/" target="_blank" rel="noopener noreferrer">Instagram ↗</a></div></div></section>
 </main><footer><span>© 2026 Impossible Indumentaria</span><span>Indumentaria deportiva personalizada · Argentina</span><a class="insta" href="https://www.instagram.com/impossible.indumentaria/" target="_blank" rel="noopener noreferrer">@impossible.indumentaria</a></footer>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
 const categories=[
  {name:"Camiseta",options:[["Simple",17000],["Bordada",19000]]},
@@ -140,6 +141,34 @@ function orderAddRow(){
 function orderUpdateTotals(){let qty=0,total=0;[...orderRows.children].forEach(r=>{qty+=Number(r.dataset.qty||0);total+=Number(r.dataset.amount||0)});document.getElementById("order-count").textContent=String(qty);document.getElementById("order-total").textContent=money(total);document.getElementById("order-deposit").textContent=money(Math.round(total/2))}
 document.getElementById("order-add").addEventListener("click",orderAddRow);
 document.getElementById("order-reset").addEventListener("click",()=>{orderRows.innerHTML="";orderAddRow()});
+document.getElementById("order-send-whatsapp").addEventListener("click",()=>{
+ const chosen=[];
+ [...orderRows.children].forEach((row,index)=>{
+   const selects=[...row.querySelectorAll(".order-controls select")];
+   const product=selects[0],variant=selects[1],mold=selects[2];
+   const qtyInputs=[...row.querySelectorAll(".size-qty-table input")];
+   const sizes=qtyInputs.map(i=>({size:i.dataset.size,qty:Math.max(0,parseInt(i.value||"0",10))})).filter(x=>x.qty>0);
+   if(sizes.length){
+     const cat=categories[product.selectedIndex];
+     const item=cat.options[Number(variant.value)];
+     chosen.push({n:index+1,product:product.value,type:item[0],mold:mold.value,unitPrice:item[1],sizes:sizes,qty:sizes.reduce((n,x)=>n+x.qty,0),amount:sizes.reduce((n,x)=>n+x.qty,0)*item[1]});
+   }
+ });
+ if(!chosen.length){alert("Cargá al menos una cantidad por talle antes de preparar el pedido.");return}
+ if(typeof XLSX==="undefined"){alert("No se pudo cargar el generador de Excel. Revisá tu conexión e intentá de nuevo.");return}
+ const details=[["IMPOSSIBLE INDUMENTARIA — PEDIDO"],["Fecha",new Date().toLocaleDateString("es-AR")],[],["Prenda","Tipo","Moldería","Talle","Cantidad","Precio unitario estimado","Subtotal estimado"]];
+ chosen.forEach(p=>p.sizes.forEach(s=>details.push([p.product,p.type,p.mold,s.size,s.qty,p.unitPrice,s.qty*p.unitPrice])));
+ details.push([],["TOTAL DE UNIDADES",chosen.reduce((n,p)=>n+p.qty,0)],["TOTAL ESTIMADO (ARS)",chosen.reduce((n,p)=>n+p.amount,0)],["SEÑA ESTIMADA 50% (ARS)",Math.round(chosen.reduce((n,p)=>n+p.amount,0)/2)],[],["Nota","Importes estimados sujetos a confirmación de disponibilidad y precio final."]]);
+ const wb=XLSX.utils.book_new();const ws=XLSX.utils.aoa_to_sheet(details);
+ ws["!cols"]=[{wch:24},{wch:27},{wch:16},{wch:10},{wch:12},{wch:24},{wch:23}];
+ XLSX.utils.book_append_sheet(wb,ws,"Pedido");
+ const stamp=new Date().toISOString().slice(0,10);
+ XLSX.writeFile(wb,"Pedido_Impossible_"+stamp+".xlsx");
+ const total=chosen.reduce((n,p)=>n+p.amount,0);
+ const lines=chosen.map(p=>"• "+p.product+" / "+p.type+" / "+p.mold+": "+p.sizes.map(s=>s.size+" ("+s.qty+")").join(", ")).join("\n");
+ const msg="Hola, Impossible Indumentaria. Quiero consultar por este pedido:\n\n"+lines+"\n\nUnidades: "+chosen.reduce((n,p)=>n+p.qty,0)+"\nTotal estimado: "+money(total)+"\nSeña estimada (50%): "+money(Math.round(total/2))+"\n\nVoy a adjuntar el archivo Excel con el detalle por talle.";
+ window.open("https://wa.me/5492914710231?text="+encodeURIComponent(msg),"_blank","noopener");
+});
 orderAddRow();
 
 </script>
