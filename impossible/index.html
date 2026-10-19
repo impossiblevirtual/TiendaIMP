@@ -154,6 +154,8 @@ function orderAddRow(){
  const controls=document.createElement("div");controls.className="order-controls";
  function makeSelect(label,options){const wrap=document.createElement("label");wrap.textContent=label;const sel=document.createElement("select");options.forEach((x,i)=>{const o=document.createElement("option");o.value=typeof x==="string"?x:String(i);o.textContent=typeof x==="string"?x:x.name;sel.appendChild(o)});wrap.appendChild(sel);controls.appendChild(wrap);return sel}
  const product=makeSelect("1. Prenda",categories.map(x=>x.name));
+ // Conjuntos disponibles: se mantienen como opciones explícitas del selector de pedido.
+ ["Campera + pantalón","Buzo + pantalón"].forEach(name=>{if(![...product.options].some(o=>o.textContent===name)){const o=document.createElement("option");o.value=String(categories.findIndex(x=>x.name===name));o.textContent=name;product.appendChild(o)}});
  const variant=makeSelect("2. Tipo",[]);
  const mold=makeSelect("3. Moldería",["Masculina","Femenina","Unisex"]);
  const sizes=document.createElement("div");sizes.className="size-qty-table";
