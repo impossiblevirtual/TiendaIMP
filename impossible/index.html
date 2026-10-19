@@ -175,7 +175,7 @@ document.getElementById("order-send-whatsapp").addEventListener("click",()=>{
  [...orderRows.children].forEach((row,index)=>{
    const selects=[...row.querySelectorAll(".order-controls select")];
    const product=selects[0],variant=selects[1],mold=selects[2];
-   const qtyInputs=[...row.querySelectorAll(".size-qty-grid input, .size-qty-item input")];
+   const qtyInputs=[...row.querySelectorAll(".size-qty-table input")];
    const sizes=qtyInputs.map(i=>({size:i.dataset.size,qty:Math.max(0,parseInt(i.value||"0",10))})).filter(x=>x.qty>0);
    if(sizes.length){
      const cat=categories[product.selectedIndex];
