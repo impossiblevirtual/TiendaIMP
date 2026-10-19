@@ -170,7 +170,8 @@ document.getElementById("order-send-whatsapp").addEventListener("click",()=>{
  if(requestedUnits<10){alert("El pedido mínimo de Impossible Indumentaria es de 10 prendas. Actualmente cargaste "+requestedUnits+". Agregá "+(10-requestedUnits)+" prenda(s) más para poder preparar el Excel y continuar por WhatsApp.");return}
  if(typeof XLSX==="undefined"){alert("No se pudo cargar el generador de Excel. Revisá tu conexión e intentá de nuevo.");return}
  const details=[["IMPOSSIBLE INDUMENTARIA — PEDIDO"],["Fecha",new Date().toLocaleDateString("es-AR")],[],["Prenda","Tipo","Moldería","Talle","Cantidad","Precio unitario estimado","Subtotal estimado"]];
- chosen.forEach(p=>p.sizes.forEach(s=>details.push([p.product,p.type,p.mold,s.size,s.qty,p.unitPrice,s.qty*p.unitPrice])));
+ const displaySize=size=>/^(0|2|4|6|8|10|12|14|16)$/.test(String(size))?"T"+size:String(size);
+ chosen.forEach(p=>p.sizes.forEach(s=>details.push([p.product,p.type,p.mold,displaySize(s.size),s.qty,p.unitPrice,s.qty*p.unitPrice])));
  const totalUnits=chosen.reduce((n,p)=>n+p.qty,0);
   const totalAmount=chosen.reduce((n,p)=>n+p.amount,0);
   details.push([],["TOTAL DE UNIDADES",totalUnits],["TOTAL ESTIMADO (ARS)",totalAmount],["SEÑA ESTIMADA 50% (ARS)",Math.round(totalAmount/2)],[],["Nota","Importes estimados sujetos a confirmación de disponibilidad y precio final."]);
@@ -180,8 +181,8 @@ document.getElementById("order-send-whatsapp").addEventListener("click",()=>{
  const stamp=new Date().toISOString().slice(0,10);
  XLSX.writeFile(wb,"Pedido_Impossible_"+stamp+".xlsx");
  const total=chosen.reduce((n,p)=>n+p.amount,0);
- const lines=chosen.map(p=>"• "+p.product+" / "+p.type+" / "+p.mold+": "+p.sizes.map(s=>s.size+" ("+s.qty+")").join(", ")).join("\n");
- const msg="Hola, Impossible Indumentaria. Quiero consultar por este pedido:\n\n"+lines+"\n\nUnidades: "+chosen.reduce((n,p)=>n+p.qty,0)+"\nTotal estimado: "+money(total)+"\nSeña estimada (50%): "+money(Math.round(total/2))+"\n\nVoy a adjuntar el archivo Excel con el detalle por talle.";
+ const lines=chosen.map(p=>"• "+p.product+" / "+p.type+" / "+p.mold+":\n"+p.sizes.map(s=>"  "+displaySize(s.size)+": "+s.qty+" unidad(es)").join("\n")).join("\n\n");
+ const msg="Hola, Impossible Indumentaria. Mi pedido es este:\n\n"+lines+"\n\nUnidades: "+chosen.reduce((n,p)=>n+p.qty,0)+"\nTotal estimado: "+money(total)+"\nSeña estimada (50%): "+money(Math.round(total/2))+"\n\nVoy a adjuntar el archivo Excel con el detalle por talle.";
  window.open("https://wa.me/5492914710231?text="+encodeURIComponent(msg),"_blank","noopener");
 });
 orderAddRow();
