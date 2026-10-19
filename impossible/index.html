@@ -206,7 +206,7 @@ document.getElementById("order-send-whatsapp").addEventListener("click",()=>{
  const stamp=new Date().toISOString().slice(0,10);
  XLSX.writeFile(wb,"Pedido_Impossible_"+stamp+".xlsx");
  const total=chosen.reduce((n,p)=>n+p.amount,0);
- const lines=chosen.map(p=>"• "+p.product+" / "+p.type+" / "+p.mold+":\n"+p.sizes.map(s=>"  "+displaySize(s.size)+": "+s.qty+" unidad(es)").join("\n")).join("\n\n");
+ const lines=chosen.map(p=>"• "+p.product+(p.withNames?" (con nombre)":"")+" / "+p.type+" / "+p.mold+":\n"+p.sizes.map(s=>"  "+displaySize(s.size)+": "+s.qty+" unidad(es)"+(p.withNames?"\n    Nombres: "+s.names.join(", "):"")).join("\n")).join("\n\n");
  const msg="Hola, Impossible Indumentaria. Mi pedido es este:\n\nCliente / equipo: "+clientName+"\n\n"+lines+"\n\nUnidades: "+chosen.reduce((n,p)=>n+p.qty,0)+"\nTotal estimado: "+money(total)+"\nSeña estimada (50%): "+money(Math.round(total/2))+"\n\nVoy a adjuntar el archivo Excel con el detalle por talle.";
  window.open("https://wa.me/5492914710231?text="+encodeURIComponent(msg),"_blank","noopener");
 });
