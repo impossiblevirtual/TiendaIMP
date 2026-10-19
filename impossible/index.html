@@ -20,6 +20,22 @@ section{padding:55px 0}.section-head{max-width:720px;margin-bottom:26px}.section
 
 @media(max-width:760px){.order-controls{grid-template-columns:1fr}.size-tables{grid-template-columns:1fr}.size-qty-table table{min-width:490px}.size-qty-table input{width:65px;padding:9px}}
 
+/* Identidad visual diferenciada para las dos herramientas de pedido */
+#calculadora .section-accordion{background:linear-gradient(125deg,#d9fff9 0%,#8be9dd 100%);border:2px solid #55d8ca;box-shadow:0 8px 28px rgba(85,216,202,.14);color:#071311}
+#calculadora .section-accordion>summary .tag{color:#17665e}
+#calculadora .section-accordion .accordion-title{color:#071311}
+#calculadora .section-accordion .accordion-indicator{border-color:#17665e}
+#calculadora .section-accordion .accordion-indicator:before,#calculadora .section-accordion .accordion-indicator:after{background:#17665e}
+#calculadora .section-accordion .accordion-content{border-top-color:rgba(7,19,17,.2)}
+#arma-tu-pedido>.section-accordion{background:linear-gradient(125deg,#202827 0%,#101413 72%);border:2px solid #f2f7f5;box-shadow:0 8px 28px rgba(0,0,0,.28)}
+#arma-tu-pedido>.section-accordion>summary{border-left:6px solid #f4f7f5}
+#arma-tu-pedido>.section-accordion>summary .tag{color:#fff}
+#arma-tu-pedido>.section-accordion .accordion-title{color:#f4f7f5}
+#arma-tu-pedido>.section-accordion .accordion-indicator{border-color:#f4f7f5}
+#arma-tu-pedido>.section-accordion .accordion-indicator:before,#arma-tu-pedido>.section-accordion .accordion-indicator:after{background:#f4f7f5}
+#calculadora .section-accordion>summary:hover{filter:brightness(.97)}
+#arma-tu-pedido>.section-accordion>summary:hover{background:rgba(255,255,255,.045)}
+
 /* Secciones plegables para una navegación más compacta */
 .accordion-section{padding:10px 0;border-bottom:1px solid var(--line)}
 .section-accordion{border:1px solid var(--line);border-radius:9px;background:linear-gradient(120deg,#121716,#0d100f);overflow:hidden}
