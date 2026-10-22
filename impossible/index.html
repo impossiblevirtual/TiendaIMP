@@ -5,6 +5,11 @@
 <meta name="theme-color" content="#0b0d0d">
 <meta name="description" content="Indumentaria deportiva personalizada para clubes, equipos y grupos. Consultá modelos, telas, precios y calculá tu pedido con Impossible Indumentaria.">
 <meta property="og:type" content="website"><meta property="og:title" content="Impossible Indumentaria | Tu equipo, tu identidad"><meta property="og:description" content="Ropa deportiva personalizada, precios y calculadora de pedidos."><meta property="og:url" content="https://impossiblevirtual.github.io/TiendaIMP/impossible/"><meta property="og:site_name" content="Impossible Indumentaria">
+<meta property="og:image" content="https://impossiblevirtual.github.io/TiendaIMP/impossible/assets/gallery/atlas-frente-800.jpg">
+<meta property="og:image:alt" content="Rompeviento deportivo negro con franjas celestes y escudo Atlas.">
+<meta property="og:image:width" content="800">
+<meta property="og:image:height" content="1192">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://impossiblevirtual.github.io/TiendaIMP/impossible/">
 <title>Impossible Indumentaria | Ropa deportiva personalizada</title>
 <style>
@@ -115,14 +120,178 @@ section{padding:55px 0}.section-head{max-width:720px;margin-bottom:26px}.section
   .mobile-cta{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(9,11,11,.94);border-top:1px solid var(--line);backdrop-filter:blur(10px)}
   .mobile-cta .btn{flex:1;min-height:50px;padding:11px 12px}
 }
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.skip-link{transition:none}}
+/* Galería fotográfica */
+.gallery-section{padding:55px 0 30px}
+.gallery-head{max-width:780px;margin-bottom:24px}
+.gallery-head h2{font-size:clamp(2rem,4vw,3.1rem);letter-spacing:-.045em;line-height:1.05;margin:9px 0 13px}
+.gallery-head p{color:var(--muted);margin:0}
+.photo-mosaic{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:13px}
+.photo-tile{position:relative;display:block;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#101413;color:var(--white);text-decoration:none;isolation:isolate}
+.photo-tile img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.photo-tile-feature{grid-row:1/3;min-height:0}
+.photo-tile-feature img{object-position:center 42%}
+.photo-tile-side{aspect-ratio:3/4}
+.photo-tile-side img{object-position:center 32%}
+.photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-top:13px}
+.photo-grid .photo-tile{aspect-ratio:3/4}
+.photo-grid .photo-tile img{object-position:center 38%}
+.photo-shade{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(4,8,8,0) 38%,rgba(4,8,8,.55) 70%,rgba(4,8,8,.9) 100%)}
+.photo-meta{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;flex-direction:column;gap:2px;padding:16px 17px;pointer-events:none}
+.photo-kicker{color:var(--accent2);font-size:.68rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+.photo-name{font-size:1.2rem;font-weight:950;letter-spacing:-.025em;line-height:1.1}
+.photo-desc{color:#d9e5e1;font-size:.8rem;line-height:1.35}
+.photo-zoom{position:absolute;top:11px;right:11px;z-index:2;padding:5px 8px;border:1px solid rgba(85,216,202,.55);border-radius:999px;background:rgba(7,12,11,.72);color:var(--accent2);font-size:.66rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;pointer-events:none;backdrop-filter:blur(6px)}
+.photo-grid .photo-meta{padding:13px 14px}
+.photo-grid .photo-name{font-size:1.05rem}
+.photo-grid .photo-desc{font-size:.76rem}
+.photo-tile:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.gallery-cta{display:flex;align-items:center;justify-content:space-between;gap:22px;margin-top:22px;padding:24px;border:1px solid var(--accent);border-radius:9px;background:linear-gradient(125deg,rgba(85,216,202,.13),rgba(20,25,24,.92) 55%,#0e1211)}
+.gallery-cta h3{font-size:clamp(1.35rem,3vw,1.9rem);line-height:1.1;letter-spacing:-.035em;margin:4px 0 6px}
+.gallery-cta p{max-width:560px;margin:0;color:var(--muted);font-size:.92rem}
+.gallery-cta .actions{flex-shrink:0;margin-top:0}
+.gallery-note{max-width:860px;margin-top:14px}
+@media(hover:hover){
+.photo-tile img{transition:transform .55s cubic-bezier(.2,.7,.2,1),filter .3s ease}
+.photo-tile:hover img{transform:scale(1.035);filter:brightness(1.06)}
+.photo-zoom{opacity:0;transition:opacity .2s ease,background .2s ease,color .2s ease}
+.photo-tile:hover .photo-zoom,.photo-tile:focus-visible .photo-zoom{opacity:1}
+.photo-tile:hover .photo-zoom{background:var(--accent);border-color:var(--accent);color:#07100f}
+}
+.photo-dialog{width:min(1000px,calc(100% - 20px));max-width:1000px;max-height:calc(100vh - 20px);margin:auto;padding:0;border:1px solid #3a4743;border-radius:10px;background:#0b0e0d;color:var(--white);overflow:hidden}
+.photo-dialog::backdrop{background:rgba(3,6,6,.88);backdrop-filter:blur(5px)}
+.photo-dialog-figure{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,.6fr);max-height:calc(100vh - 22px);margin:0;overflow:hidden}
+.photo-dialog-media{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;padding:12px;background:#050807;overflow:hidden}
+.photo-dialog img{display:block;width:auto;height:auto;max-width:100%;max-height:82vh;object-fit:contain;opacity:1;transition:opacity .2s ease}
+.photo-dialog img.is-loading{opacity:.25}
+.photo-dialog-copy{padding:24px 22px;border-left:1px solid var(--line);overflow:auto}
+.photo-dialog-copy .tag{display:block;margin-bottom:8px}
+.photo-dialog-copy h3{font-size:clamp(1.4rem,3vw,2rem);line-height:1.05;letter-spacing:-.04em;margin:0 0 8px}
+.photo-dialog-copy p{margin:0 0 16px;color:var(--muted);font-size:.92rem}
+.photo-dialog-copy .btn{width:100%}
+.photo-dialog-close{position:absolute;top:10px;right:10px;z-index:6;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid rgba(255,255,255,.35);border-radius:50%;background:rgba(7,10,9,.78);color:#fff;font-size:1.2rem;line-height:1;cursor:pointer;backdrop-filter:blur(6px)}
+.photo-dialog-nav{position:absolute;top:50%;z-index:4;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid rgba(85,216,202,.6);border-radius:50%;background:rgba(7,10,9,.8);color:var(--accent2);font-size:1.5rem;line-height:1;cursor:pointer;transform:translateY(-50%);backdrop-filter:blur(6px)}
+.photo-dialog-prev{left:10px}
+.photo-dialog-next{right:10px}
+.photo-dialog-close:hover,.photo-dialog-nav:hover{background:var(--accent);border-color:var(--accent);color:#07100f}
+.photo-dialog-close:focus-visible,.photo-dialog-nav:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+body.photo-open{overflow:hidden}
+@media(max-width:900px){
+.photo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gallery-cta{align-items:flex-start}
+}
+@media(max-width:760px){
+.gallery-section{padding:35px 0 20px}
+.photo-mosaic{grid-template-columns:1fr;gap:10px}
+.photo-tile-feature{grid-row:auto;aspect-ratio:3/4}
+.photo-tile-side{aspect-ratio:3/4}
+.photo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.photo-grid .photo-tile{aspect-ratio:3/4}
+.photo-grid .photo-meta{padding:10px 11px}
+.photo-grid .photo-name{font-size:1rem}
+.photo-grid .photo-desc{font-size:.75rem}
+.photo-grid .photo-kicker{display:none}
+.photo-grid .photo-tile-rompeviento .photo-kicker{display:block}
+.photo-grid .photo-tile-rompeviento .kicker-prefix{display:none}
+.photo-kicker{font-size:.64rem}
+.photo-zoom{top:8px;right:8px;padding:4px 7px;font-size:.6rem}
+.gallery-cta{display:grid;gap:16px;padding:18px}
+.gallery-cta .actions{display:grid;grid-template-columns:1fr;gap:8px}
+.gallery-cta .btn{width:100%}
+.photo-dialog{width:calc(100% - 12px);max-height:calc(100vh - 12px)}
+.photo-dialog-figure{grid-template-columns:1fr;max-height:calc(100vh - 14px);overflow:auto}
+.photo-dialog-media{padding:8px}
+.photo-dialog img{max-height:54vh}
+.photo-dialog-copy{border-top:1px solid var(--line);border-left:0;padding:16px}
+.photo-dialog-close{top:8px;right:8px;width:40px;height:40px}
+.photo-dialog-nav{width:42px;height:42px;font-size:1.4rem}
+.photo-dialog-prev{left:6px}
+.photo-dialog-next{right:6px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.skip-link{transition:none}.photo-tile img,.photo-dialog img{transition:none}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ClothingStore","name":"Impossible Indumentaria","url":"https://impossiblevirtual.github.io/TiendaIMP/impossible/","sameAs":["https://www.instagram.com/impossible.indumentaria/"],"description":"Indumentaria deportiva personalizada para clubes, equipos y grupos en Argentina."}</script>
 </head>
 <body><a class="skip-link" href="#inicio">Saltar al contenido</a><div class="wrap">
-<nav aria-label="Navegación principal"><a class="wordmark" href="#inicio">IMPOSSIBLE<span>.</span></a><div class="nav-links"><a href="#productos">Productos</a><a href="#calculadora">Precios</a><a href="#arma-tu-pedido">Armá tu pedido</a><a class="nav-insta" href="https://www.instagram.com/impossible.indumentaria/" target="_blank" rel="noopener noreferrer">@impossible.indumentaria ↗</a></div></nav>
-<header class="hero" id="inicio"><div class="hero-copy"><div class="tag">Indumentaria deportiva personalizada</div><h1>VESTÍ LOS<br><em>COLORES</em><br>DE TU EQUIPO.</h1><p>Camisetas, conjuntos y prendas deportivas para clubes, equipos y grupos. Tu identidad, tus colores, tu equipo.</p><div class="actions"><a class="btn primary" href="#arma-tu-pedido">Armá tu pedido ↓</a><a class="btn" href="#calculadora">Ver precios</a><a class="btn" href="#productos">Productos</a></div><p class="hero-note">Sin registro: completá el pedido, descargá el Excel y abrí WhatsApp con el detalle. <a class="insta" href="https://wa.me/5492914710231?text=Hola%2C%20Impossible.%20Quiero%20hacer%20una%20consulta%20sobre%20un%20pedido." target="_blank" rel="noopener noreferrer">¿Dudas? Escribinos ↗</a></p><div class="trust-strip" aria-label="Datos útiles del pedido"><div class="trust-item"><strong>Moldería</strong>Masculina, femenina y unisex</div><div class="trust-item"><strong>Pedido mínimo</strong>10 prendas</div><div class="trust-item"><strong>Seña</strong>50% al confirmar</div><div class="trust-item"><strong>Consultas</strong>Por WhatsApp e Instagram</div></div></div></header>
+<nav aria-label="Navegación principal"><a class="wordmark" href="#inicio">IMPOSSIBLE<span>.</span></a><div class="nav-links"><a href="#productos">Productos</a><a href="#galeria">Galería</a><a href="#calculadora">Precios</a><a href="#arma-tu-pedido">Armá tu pedido</a><a class="nav-insta" href="https://www.instagram.com/impossible.indumentaria/" target="_blank" rel="noopener noreferrer">@impossible.indumentaria ↗</a></div></nav>
+<header class="hero" id="inicio"><div class="hero-copy"><div class="tag">Indumentaria deportiva personalizada</div><h1>VESTÍ LOS<br><em>COLORES</em><br>DE TU EQUIPO.</h1><p>Camisetas, conjuntos y prendas deportivas para clubes, equipos y grupos. Tu identidad, tus colores, tu equipo.</p><div class="actions"><a class="btn primary" href="#arma-tu-pedido">Armá tu pedido ↓</a><a class="btn" href="#calculadora">Ver precios</a><a class="btn" href="#galeria">Ver galería</a></div><p class="hero-note">Sin registro: completá el pedido, descargá el Excel y abrí WhatsApp con el detalle. <a class="insta" href="https://wa.me/5492914710231?text=Hola%2C%20Impossible.%20Quiero%20hacer%20una%20consulta%20sobre%20un%20pedido." target="_blank" rel="noopener noreferrer">¿Dudas? Escribinos ↗</a></p><div class="trust-strip" aria-label="Datos útiles del pedido"><div class="trust-item"><strong>Moldería</strong>Masculina, femenina y unisex</div><div class="trust-item"><strong>Pedido mínimo</strong>10 prendas</div><div class="trust-item"><strong>Seña</strong>50% al confirmar</div><div class="trust-item"><strong>Consultas</strong>Por WhatsApp e Instagram</div></div></div></header>
 <main>
+<section id="galeria" class="gallery-section" aria-labelledby="galeria-title">
+<div class="section-head gallery-head">
+<span class="tag">Galería / Prendas personalizadas</span>
+<h2 id="galeria-title">Así se ve tu equipo.</h2>
+<p>Rompevientos, conjuntos y musculosas con escudos, nombres y combinaciones de color. Elegí una referencia y armá el pedido con los colores de tu equipo.</p>
+</div>
+<div class="photo-mosaic">
+<a class="photo-tile photo-tile-feature" href="assets/gallery/atlas-detalle-800.jpg" data-photo data-title="Atlas · Rompeviento" data-kicker="Detalle / Rompeviento" data-desc="Capucha, cierre y escudo · Negro + celeste" data-alt="Detalle del rompeviento Atlas: capucha con interior celeste, cierre central, franjas y escudo." data-category="Rompeviento" data-cta="Pedir rompeviento" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/atlas-detalle-800.jpg" srcset="assets/gallery/atlas-detalle-480.jpg 480w, assets/gallery/atlas-detalle-800.jpg 800w" sizes="(max-width: 760px) 92vw, (max-width: 1100px) 63vw, 725px" width="800" height="1067" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Detalle / Rompeviento</span><strong class="photo-name">Atlas</strong><span class="photo-desc">Capucha, cierre y escudo · Negro + celeste</span></span>
+</a>
+<a class="photo-tile photo-tile-side" href="assets/gallery/cds-conjunto-800.jpg" data-photo data-title="CDS" data-kicker="Equipos / Conjunto" data-desc="Camiseta verde + short negro" data-alt="Conjunto CDS con camiseta verde de mangas blancas y short negro." data-category="Camiseta + short" data-cta="Pedir conjunto" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/cds-conjunto-800.jpg" srcset="assets/gallery/cds-conjunto-480.jpg 480w, assets/gallery/cds-conjunto-800.jpg 800w" sizes="(max-width: 760px) 92vw, (max-width: 1100px) 40vw, 430px" width="800" height="1192" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Equipos / Conjunto</span><strong class="photo-name">CDS</strong><span class="photo-desc">Camiseta verde + short negro</span></span>
+</a>
+<a class="photo-tile photo-tile-side" href="assets/gallery/uta-conjunto-800.jpg" data-photo data-title="UTA" data-kicker="Equipos / Conjunto" data-desc="Blanco + azul · Número 24" data-alt="Conjunto UTA blanco y azul con el número 24 en la camiseta y el short." data-category="Musculosa + short" data-cta="Pedir conjunto" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/uta-conjunto-800.jpg" srcset="assets/gallery/uta-conjunto-480.jpg 480w, assets/gallery/uta-conjunto-800.jpg 800w" sizes="(max-width: 760px) 92vw, (max-width: 1100px) 40vw, 430px" width="800" height="1071" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Equipos / Conjunto</span><strong class="photo-name">UTA</strong><span class="photo-desc">Blanco + azul · Número 24</span></span>
+</a>
+</div>
+<div class="photo-grid">
+<a class="photo-tile photo-tile-rompeviento" href="assets/gallery/atlas-frente-800.jpg" data-photo data-title="Atlas · Rompeviento · Frente" data-kicker="Equipo / Rompeviento" data-desc="Negro + celeste · Escudo y nombre" data-alt="Rompeviento Atlas negro con franjas celestes y blancas, escudo Atlas y nombre PACHE." data-category="Rompeviento" data-cta="Pedir rompeviento" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/atlas-frente-800.jpg" srcset="assets/gallery/atlas-frente-480.jpg 480w, assets/gallery/atlas-frente-800.jpg 800w" sizes="(max-width: 760px) 46vw, (max-width: 1100px) 31vw, 360px" width="800" height="1192" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker"><span class="kicker-prefix">Equipo / </span>Rompeviento</span><strong class="photo-name">Atlas · Frente</strong><span class="photo-desc">Negro + celeste · Escudo y nombre</span></span>
+</a>
+<a class="photo-tile photo-tile-rompeviento" href="assets/gallery/atlas-espalda-800.jpg" data-photo data-title="Atlas · Rompeviento · Espalda" data-kicker="Equipo / Rompeviento" data-desc="Nombre del equipo y franja central" data-alt="Espalda del rompeviento Atlas negro con la palabra ATLAS y franja celeste." data-category="Rompeviento" data-cta="Pedir rompeviento" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/atlas-espalda-800.jpg" srcset="assets/gallery/atlas-espalda-480.jpg 480w, assets/gallery/atlas-espalda-800.jpg 800w" sizes="(max-width: 760px) 46vw, (max-width: 1100px) 31vw, 360px" width="800" height="1192" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker"><span class="kicker-prefix">Equipo / </span>Rompeviento</span><strong class="photo-name">Atlas · Espalda</strong><span class="photo-desc">Nombre del equipo y franja central</span></span>
+</a>
+<a class="photo-tile" href="assets/gallery/cds-conjunto-lado-800.jpg" data-photo data-title="CDS · Lateral" data-kicker="Equipos / Conjunto" data-desc="Verde + blanco · Conjunto completo" data-alt="Vista lateral del conjunto CDS con camiseta verde y short negro." data-category="Camiseta + short" data-cta="Pedir conjunto" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/cds-conjunto-lado-800.jpg" srcset="assets/gallery/cds-conjunto-lado-480.jpg 480w, assets/gallery/cds-conjunto-lado-800.jpg 800w" sizes="(max-width: 760px) 46vw, (max-width: 1100px) 31vw, 360px" width="800" height="1192" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Equipos / Conjunto</span><strong class="photo-name">CDS · Lateral</strong><span class="photo-desc">Verde + blanco · Conjunto completo</span></span>
+</a>
+<a class="photo-tile" href="assets/gallery/kickboxing-musculosa-800.jpg" data-photo data-title="Kickboxing" data-kicker="Deporte / Musculosa" data-desc="Negro · Muay Thai y nombre Larida" data-alt="Musculosa negra de kickboxing y muay thai con el nombre Larida." data-category="Musculosa" data-cta="Pedir musculosa" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/kickboxing-musculosa-800.jpg" srcset="assets/gallery/kickboxing-musculosa-480.jpg 480w, assets/gallery/kickboxing-musculosa-800.jpg 800w" sizes="(max-width: 760px) 46vw, (max-width: 1100px) 31vw, 360px" width="800" height="993" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Deporte / Musculosa</span><strong class="photo-name">Kickboxing</strong><span class="photo-desc">Negro · Muay Thai y nombre Larida</span></span>
+</a>
+<a class="photo-tile" href="assets/gallery/uta-camiseta-413.jpg" data-photo data-title="UTA · Camiseta" data-kicker="Detalle / Camiseta" data-desc="Azul + negro · Bahía Blanca" data-alt="Camiseta UTA azul y negra con la inscripción UTA Bahía Blanca." data-category="Camiseta" data-cta="Pedir camiseta" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/uta-camiseta-413.jpg" width="413" height="520" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Detalle / Camiseta</span><strong class="photo-name">UTA · Camiseta</strong><span class="photo-desc">Azul + negro · Bahía Blanca</span></span>
+</a>
+<a class="photo-tile" href="assets/gallery/short-femenino-800.jpg" data-photo data-title="Fútbol Femenino" data-kicker="Fútbol / Short" data-desc="Negro · Escudos y terminaciones" data-alt="Short negro de fútbol femenino con escudos celestes y la inscripción Bahía Blanca." data-category="Short" data-cta="Pedir short" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/short-femenino-800.jpg" srcset="assets/gallery/short-femenino-480.jpg 480w, assets/gallery/short-femenino-800.jpg 800w" sizes="(max-width: 760px) 46vw, (max-width: 1100px) 31vw, 360px" width="800" height="1068" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Fútbol / Short</span><strong class="photo-name">Fútbol Femenino</strong><span class="photo-desc">Negro · Escudos y terminaciones</span></span>
+</a>
+</div>
+<div class="gallery-cta">
+<div>
+<span class="tag">Siguiente paso</span>
+<h3>Tu equipo, con su identidad.</h3>
+<p>Elegí una referencia, contanos tus colores y armamos el pedido juntos.</p>
+</div>
+<div class="actions">
+<a class="btn primary" href="#arma-tu-pedido">Armá tu pedido</a>
+<a class="btn" href="https://wa.me/5492914710231?text=Hola%2C%20Impossible.%20Quiero%20consultar%20por%20un%20pedido%20con%20los%20colores%20de%20mi%20equipo." target="_blank" rel="noopener noreferrer">Consultanos</a>
+</div>
+</div>
+<p class="fineprint gallery-note">Las imágenes muestran prendas y combinaciones de color de referencia. Los detalles finales, talles y disponibilidad se confirman con Impossible antes de producir.</p>
+</section>
 <section id="como-trabajamos" class="accordion-section"><details class="section-accordion"><summary><span class="tag">01 / Cómo trabajamos</span><span class="accordion-title">De tu idea a la identidad de tu equipo.</span><span class="accordion-indicator" aria-hidden="true"></span></summary><div class="accordion-content"><div class="steps"><div class="step"><div class="tag">PASO 01</div><strong>Contanos qué imaginan</strong><p>Elegí las prendas, cantidades, colores y si querés sumar escudo, logo, nombres o números.</p></div><div class="step"><div class="tag">PASO 02</div><strong>Definimos el pedido</strong><p>Revisamos las opciones y el diseño antes de confirmar. Consultá por estampado o bordado.</p></div><div class="step"><div class="tag">PASO 03</div><strong>Confirmación y producción</strong><p>Con el pedido confirmado se coordina una seña del 50%. Los plazos son estimados y se confirman al hacer el pedido.</p></div></div><p class="note">Pedido mínimo informado: 10 prendas. Consultá condiciones y disponibilidad antes de confirmar.</p></div></details></section>
 <section id="productos" class="accordion-section"><details class="section-accordion"><summary><span class="tag">02 / Productos</span><span class="accordion-title">Prendas para jugar en equipo.</span><span class="accordion-indicator" aria-hidden="true"></span></summary><div class="accordion-content"><div class="cards">
 <article class="card"><div class="num">01 — JUEGO</div><h3>Camisetas, musculosas y shorts</h3><p>Tela Jersey Set premium. Camisetas y musculosas con moldería masculina o femenina. Short: consultar tabla y moldería. Podés pedir conjunto o prendas por separado.</p><div class="card-price">Desde $15.000</div><div class="card-links"><a href="#arma-tu-pedido" data-order-category="Camiseta">Pedir camiseta →</a><a href="#arma-tu-pedido" data-order-category="Musculosa">Pedir musculosa →</a><a href="https://wa.me/5492914710231?text=Hola%2C%20Impossible.%20Quiero%20consultar%20por%20el%20talle%20y%20la%20molder%C3%ADa%20de%20Short." target="_blank" rel="noopener noreferrer">Consultar short ↗</a><a href="#arma-tu-pedido" data-order-category="Camiseta + short">Pedir conjunto →</a></div><p class="card-refs">Referencias reales: <a class="insta" href="https://www.instagram.com/p/DZOOclfmG7V/?img_index=4" target="_blank" rel="noopener noreferrer">camiseta ↗</a> · <a class="insta" href="https://www.instagram.com/p/DTaqqh0jq-5/" target="_blank" rel="noopener noreferrer">musculosa ↗</a> · <a class="insta" href="https://www.instagram.com/p/DYGQdMUDBgS/?img_index=2" target="_blank" rel="noopener noreferrer">short ↗</a></p></article>
@@ -159,6 +328,22 @@ section{padding:55px 0}.section-head{max-width:720px;margin-bottom:26px}.section
 <section id="contacto" class="accordion-section"><details class="section-accordion"><summary><span class="tag">07 / Contacto</span><span class="accordion-title">Tu próximo equipo empieza acá.</span><span class="accordion-indicator" aria-hidden="true"></span></summary><div class="accordion-content"><div class="contact"><div><div class="tag">07 / Contacto</div><h2>Tu próximo equipo<br>empieza acá.</h2><p>Consultanos por diseños, disponibilidad, tablas de talles y pedidos personalizados. Si todavía no tenés todo definido, escribinos y vemos tu caso.</p></div><div class="actions"><a class="btn primary" href="https://wa.me/5492914710231?text=Hola%2C%20Impossible.%20Quiero%20hacer%20una%20consulta%20sobre%20un%20pedido." target="_blank" rel="noopener noreferrer">WhatsApp ↗</a><a class="btn" href="https://www.instagram.com/impossible.indumentaria/" target="_blank" rel="noopener noreferrer">Instagram ↗</a></div></div></div></details></section>
 </main><noscript><div class="notice">La calculadora y el armado de pedido necesitan JavaScript. Podés consultarnos por WhatsApp.</div></noscript><footer><span>© 2026 Impossible Indumentaria</span><span>Indumentaria deportiva personalizada · Argentina</span><a class="insta" href="https://www.instagram.com/impossible.indumentaria/" target="_blank" rel="noopener noreferrer">@impossible.indumentaria</a></footer><div class="mobile-cta" aria-label="Acciones rápidas"><a class="btn primary" href="#arma-tu-pedido">Armá tu pedido</a><a class="btn" href="https://wa.me/5492914710231?text=Hola%2C%20Impossible.%20Quiero%20hacer%20una%20consulta%20sobre%20un%20pedido." target="_blank" rel="noopener noreferrer">WhatsApp</a></div>
 </div>
+<dialog id="photo-dialog" class="photo-dialog" aria-labelledby="photo-dialog-title" aria-describedby="photo-dialog-desc">
+<button class="photo-dialog-close" type="button" aria-label="Cerrar imagen">×</button>
+<figure class="photo-dialog-figure">
+<div class="photo-dialog-media">
+<img id="photo-dialog-img" src="assets/gallery/atlas-detalle-800.jpg" alt="" width="800" height="1067" loading="lazy" decoding="async">
+<button class="photo-dialog-nav photo-dialog-prev" type="button" aria-label="Imagen anterior">‹</button>
+<button class="photo-dialog-nav photo-dialog-next" type="button" aria-label="Imagen siguiente">›</button>
+</div>
+<figcaption class="photo-dialog-copy" aria-live="polite">
+<span class="tag" id="photo-dialog-kicker">Detalle / Rompeviento</span>
+<h3 id="photo-dialog-title">Atlas · Rompeviento</h3>
+<p id="photo-dialog-desc">Capucha, cierre y escudo · Negro + celeste</p>
+<a class="btn primary" id="photo-dialog-cta" href="#arma-tu-pedido" data-order-category="Rompeviento">Pedir rompeviento</a>
+</figcaption>
+</figure>
+</dialog>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
 const categories = [
@@ -946,6 +1131,104 @@ function openHashTarget() {
 }
 window.addEventListener("hashchange", openHashTarget);
 if (location.hash) setTimeout(openHashTarget, 0);
+
+/* Galería: visor de fotos accesible */
+(() => {
+  const dialog = document.getElementById("photo-dialog");
+  if (!dialog) return;
+  const triggers = [...document.querySelectorAll("[data-photo]")];
+  if (!triggers.length) return;
+  const img = document.getElementById("photo-dialog-img");
+  const kicker = document.getElementById("photo-dialog-kicker");
+  const title = document.getElementById("photo-dialog-title");
+  const desc = document.getElementById("photo-dialog-desc");
+  const cta = document.getElementById("photo-dialog-cta");
+  const closeBtn = dialog.querySelector(".photo-dialog-close");
+  const prevBtn = dialog.querySelector(".photo-dialog-prev");
+  const nextBtn = dialog.querySelector(".photo-dialog-next");
+  let index = 0;
+  let lastFocus = null;
+  let skipRestore = false;
+
+  function render(i) {
+    index = (i + triggers.length) % triggers.length;
+    const trigger = triggers[index];
+    const full = trigger.dataset.full || trigger.getAttribute("href");
+    img.classList.add("is-loading");
+    img.alt = trigger.dataset.alt || "";
+    img.onload = () => img.classList.remove("is-loading");
+    img.onerror = () => img.classList.remove("is-loading");
+    img.src = full;
+    if (img.complete && img.naturalWidth) img.classList.remove("is-loading");
+    kicker.textContent = trigger.dataset.kicker || "Galería";
+    title.textContent = trigger.dataset.title || "";
+    desc.textContent = trigger.dataset.desc || "";
+    const category = trigger.dataset.category || "";
+    cta.dataset.orderCategory = category;
+    cta.textContent = trigger.dataset.cta || "Armá tu pedido";
+    cta.href = "#arma-tu-pedido";
+    cta.hidden = !category;
+    const many = triggers.length > 1;
+    prevBtn.disabled = !many;
+    nextBtn.disabled = !many;
+  }
+
+  function restoreFocus() {
+    if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
+    lastFocus = null;
+  }
+
+  function open(i, trigger) {
+    lastFocus = trigger || document.activeElement;
+    render(i);
+    if (typeof dialog.showModal === "function" && !dialog.open) dialog.showModal();
+    else dialog.setAttribute("open", "");
+    document.body.classList.add("photo-open");
+    closeBtn.focus();
+  }
+
+  function close() {
+    document.body.classList.remove("photo-open");
+    if (typeof dialog.close === "function" && dialog.open) dialog.close();
+    else {
+      dialog.removeAttribute("open");
+      restoreFocus();
+    }
+  }
+
+  triggers.forEach((trigger, i) => {
+    trigger.addEventListener("click", (event) => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+      event.preventDefault();
+      open(i, trigger);
+    });
+  });
+
+  closeBtn.addEventListener("click", close);
+  prevBtn.addEventListener("click", () => render(index - 1));
+  nextBtn.addEventListener("click", () => render(index + 1));
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) close();
+  });
+  dialog.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      render(index - 1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      render(index + 1);
+    }
+  });
+  cta.addEventListener("click", () => {
+    skipRestore = true;
+    close();
+  }, { capture: true });
+  dialog.addEventListener("close", () => {
+    document.body.classList.remove("photo-open");
+    if (!skipRestore) restoreFocus();
+    skipRestore = false;
+  });
+})();
 
 </script>
 </body></html>
