@@ -186,6 +186,7 @@ const sizeCharts = {
 };
 
 const PENDING_CHART_CATEGORIES = ["Short","Buzo","Campera","Campera + pantalón","Buzo + pantalón"];
+const PENDING_SIZE_OPTIONS = ["0","2","4","6","8","10","12","14","16","S","M","L","XL","2XL","3XL","4XL","5XL"];
 const GUIDE_IDS = {
   "Camiseta|Masculina":"tabla-camiseta-masculina",
   "Camiseta|Femenina":"tabla-camiseta-femenina",
@@ -540,8 +541,8 @@ function orderAddRow() {
       return;
     }
 
-    const chart = getSizeChart(selectedName,mold.value);
-    if (!chart) {
+    let chart = getSizeChart(selectedName,mold.value);
+    if (!chart && !PENDING_CHART_CATEGORIES.includes(selectedName)) {
       row.dataset.needsChart = "true";
       row.dataset.qty = "0";
       row.dataset.amount = "0";
@@ -579,12 +580,24 @@ function orderAddRow() {
       return;
     }
 
+    if (!chart) chart = PENDING_SIZE_OPTIONS.map(size => [size,null,null]);
     row.dataset.needsChart = "false";
     const link = document.createElement("a");
     link.className = "size-guide-link";
     link.href = "#" + getGuideId(selectedName,mold.value);
-    link.textContent = "Ver tabla de talles de esta prenda ↗";
+    link.textContent = PENDING_CHART_CATEGORIES.includes(selectedName) ? "Consultar medidas por WhatsApp ↗" : "Ver tabla de talles de esta prenda ↗";
+    if (PENDING_CHART_CATEGORIES.includes(selectedName)) {
+      link.href = whatsappUrl("Hola, Impossible. Quiero confirmar las medidas de " + selectedName + " antes de confirmar el pedido.");
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+    }
     sizes.appendChild(link);
+    if (PENDING_CHART_CATEGORIES.includes(selectedName)) {
+      const pendingNote = document.createElement("p");
+      pendingNote.className = "fineprint";
+      pendingNote.textContent = "Podés cargar cantidades por talle de referencia desde T0 hasta 5XL. Las medidas reales de esta prenda deben confirmarse por WhatsApp antes de producir.";
+      sizes.appendChild(pendingNote);
+    }
 
     if (["Camiseta + short","Musculosa + short","Campera + pantalón","Buzo + pantalón"].includes(selectedName)) {
       const note = document.createElement("p");
@@ -736,7 +749,7 @@ document.getElementById("order-send-whatsapp").addEventListener("click",() => {
     const mold = selects[2];
     const category = categories.find(c => c.name === product.value);
     if (!category) return;
-    if (row.dataset.needsChart === "true" || (!getSizeChart(category.name,mold.value) && category.name !== "Bandera")) {
+    if (row.dataset.needsChart === "true" || (!getSizeChart(category.name,mold.value) && category.name !== "Bandera" && !PENDING_CHART_CATEGORIES.includes(category.name))) {
       blocked.push(category.name);
       return;
     }
