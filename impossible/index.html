@@ -11,6 +11,13 @@
 <meta property="og:image:height" content="1192">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://impossiblevirtual.github.io/TiendaIMP/impossible/">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LL42YQKZLZ"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-LL42YQKZLZ');
+</script>
 <title>Impossible Indumentaria | Ropa deportiva personalizada</title>
 <style>
 :root{color-scheme:dark;--bg:#090b0b;--panel:#141918;--line:#303a38;--white:#f4f7f5;--muted:#b8c4c0;--accent:#55d8ca;--accent2:#a2f0e7;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -1054,6 +1061,8 @@ document.getElementById("order-send-whatsapp").addEventListener("click",() => {
     return;
   }
 
+  if (typeof gtag === "function") gtag("event", "order_prepared", {units:requestedUnits});
+
   const details = [
     ["IMPOSSIBLE INDUMENTARIA — PEDIDO"],
     ["Cliente / equipo",clientName],
@@ -1110,6 +1119,7 @@ document.getElementById("order-send-whatsapp").addEventListener("click",() => {
         download.remove();
       },2000);
       excelGenerated = true;
+      if (typeof gtag === "function") gtag("event", "excel_download", {file_type:"xlsx"});
     } catch (error) {
       console.error("No se pudo generar el Excel",error);
     }
@@ -1123,6 +1133,7 @@ document.getElementById("order-send-whatsapp").addEventListener("click",() => {
   const msg = "Hola, Impossible Indumentaria. Mi pedido es este:\n\nCliente / equipo: " + clientName + "\n\n" + lines + "\n\nUnidades: " + totalUnits + "\nTotal estimado: " + money(totalAmount) + "\nSeña estimada (50%): " + money(Math.round(totalAmount / 2)) + "\n\n" + (excelGenerated ? "Voy a adjuntar el archivo Excel con el detalle por talle." : "No pude generar el Excel automáticamente; te paso el detalle en este mensaje.");
 
   window.open(whatsappUrl(msg),"_blank","noopener");
+  if (typeof gtag === "function") gtag("event", "whatsapp_order_open", {units:totalUnits, value:totalAmount, currency:"ARS", excel_generated:excelGenerated});
   if (!excelGenerated) {
     alert("No se pudo generar el Excel. El detalle igual quedó preparado en el mensaje de WhatsApp.");
   }
@@ -1285,5 +1296,26 @@ if (location.hash) setTimeout(openHashTarget, 0);
   });
 })();
 
+</script>
+
+<script>
+/* Medición de acciones de interés, sin enviar datos personales del pedido. */
+document.addEventListener("click", function(event) {
+  const link = event.target && event.target.closest ? event.target.closest("a") : null;
+  if (!link || typeof gtag !== "function") return;
+  const href = link.getAttribute("href") || "";
+  if (link.hasAttribute("data-photo")) {
+    gtag("event", "gallery_photo_open", {photo_title: link.dataset.title || "sin_titulo"});
+  }
+  if (href.startsWith("#arma-tu-pedido")) {
+    gtag("event", "order_cta_click", {cta_text: (link.textContent || "").trim().slice(0,60)});
+  }
+  if (href.startsWith("https://wa.me/")) {
+    gtag("event", "whatsapp_contact_click", {link_text: (link.textContent || "").trim().slice(0,60)});
+  }
+  if (href.includes("instagram.com/")) {
+    gtag("event", "instagram_click");
+  }
+});
 </script>
 </body></html>
