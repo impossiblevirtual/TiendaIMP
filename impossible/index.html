@@ -135,6 +135,8 @@ section{padding:55px 0}.section-head{max-width:720px;margin-bottom:26px}.section
 .photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-top:13px}
 .photo-grid .photo-tile{aspect-ratio:3/4}
 .photo-grid .photo-tile img{object-position:center 38%}
+.photo-grid .photo-tile-wide{grid-column:span 2;aspect-ratio:auto}
+.photo-grid .photo-tile-wide img{object-position:center 45%}
 .photo-shade{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(4,8,8,0) 38%,rgba(4,8,8,.55) 70%,rgba(4,8,8,.9) 100%)}
 .photo-meta{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;flex-direction:column;gap:2px;padding:16px 17px;pointer-events:none}
 .photo-kicker{color:var(--accent2);font-size:.68rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
@@ -177,6 +179,7 @@ section{padding:55px 0}.section-head{max-width:720px;margin-bottom:26px}.section
 body.photo-open{overflow:hidden}
 @media(max-width:900px){
 .photo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.photo-grid .photo-tile-wide{aspect-ratio:4/3}
 .gallery-cta{align-items:flex-start}
 }
 @media(max-width:760px){
@@ -186,6 +189,7 @@ body.photo-open{overflow:hidden}
 .photo-tile-side{aspect-ratio:3/4}
 .photo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .photo-grid .photo-tile{aspect-ratio:3/4}
+.photo-grid .photo-tile-wide{aspect-ratio:4/3}
 .photo-grid .photo-meta{padding:10px 11px}
 .photo-grid .photo-name{font-size:1rem}
 .photo-grid .photo-desc{font-size:.75rem}
@@ -277,6 +281,56 @@ body.photo-open{overflow:hidden}
 <span class="photo-shade" aria-hidden="true"></span>
 <span class="photo-zoom" aria-hidden="true">Ampliar</span>
 <span class="photo-meta"><span class="photo-kicker">Fútbol / Short</span><strong class="photo-name">Fútbol Femenino</strong><span class="photo-desc">Negro · Escudos y terminaciones</span></span>
+</a>
+</div>
+<div class="photo-grid">
+<a class="photo-tile photo-tile-wide" href="assets/gallery/juventud-unida-conjunto-800.jpg" data-photo data-title="Juventud Unida" data-kicker="Fútbol / Conjunto" data-desc="Rojo + negro · Número 17" data-alt="Conjunto Juventud Unida rojo y negro con camiseta número 17 de frente y espalda, short y medias." data-category="Camiseta + short" data-cta="Pedir conjunto" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/juventud-unida-conjunto-800.jpg" srcset="assets/gallery/juventud-unida-conjunto-480.jpg 480w, assets/gallery/juventud-unida-conjunto-800.jpg 800w" sizes="(max-width: 900px) 94vw, (max-width: 1100px) 64vw, 740px" width="800" height="615" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Fútbol / Conjunto</span><strong class="photo-name">Juventud Unida</strong><span class="photo-desc">Rojo + negro · Número 17</span></span>
+</a>
+<a class="photo-tile" href="assets/gallery/uta-gigantes-conjunto-800.jpg" data-photo data-title="UTA · Gigantes" data-kicker="Básquet / Conjunto" data-desc="Blanco + azul · Número 24" data-alt="Conjunto UTA Gigantes de básquet blanco y azul con musculosa y short número 24, colgado junto a una pelota." data-category="Musculosa + short" data-cta="Pedir conjunto" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/uta-gigantes-conjunto-800.jpg" srcset="assets/gallery/uta-gigantes-conjunto-480.jpg 480w, assets/gallery/uta-gigantes-conjunto-800.jpg 800w" sizes="(max-width: 900px) 46vw, (max-width: 1100px) 31vw, 360px" width="800" height="1067" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Básquet / Conjunto</span><strong class="photo-name">UTA · Gigantes</strong><span class="photo-desc">Blanco + azul · Número 24</span></span>
+</a>
+<a class="photo-tile" href="assets/gallery/villamayor-musculosa-800.jpg" data-photo data-title="Team Villamayor" data-kicker="Boxeo / Musculosa" data-desc="Negro + verde · Dragón y nombre" data-alt="Musculosa negra y verde de Team Villamayor con dragón, nombre del equipo y guantes de boxeo." data-category="Musculosa" data-cta="Pedir musculosa" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/villamayor-musculosa-800.jpg" srcset="assets/gallery/villamayor-musculosa-480.jpg 480w, assets/gallery/villamayor-musculosa-800.jpg 800w" sizes="(max-width: 900px) 46vw, (max-width: 1100px) 31vw, 360px" width="800" height="800" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Boxeo / Musculosa</span><strong class="photo-name">Team Villamayor</strong><span class="photo-desc">Negro + verde · Dragón y nombre</span></span>
+</a>
+<a class="photo-tile" href="assets/gallery/comercial-musculosa-800.jpg" data-photo data-title="Comercial" data-kicker="Básquet / Musculosa" data-desc="Negro + verde + amarillo · Número 2" data-alt="Musculosa de básquet Comercial negra con detalles verdes y amarillos y el número 2, apoyada sobre una silla." data-category="Musculosa" data-cta="Pedir musculosa" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/comercial-musculosa-800.jpg" srcset="assets/gallery/comercial-musculosa-480.jpg 480w, assets/gallery/comercial-musculosa-800.jpg 800w" sizes="(max-width: 900px) 46vw, (max-width: 1100px) 31vw, 360px" width="800" height="1085" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Básquet / Musculosa</span><strong class="photo-name">Comercial</strong><span class="photo-desc">Negro + verde + amarillo · Número 2</span></span>
+</a>
+<a class="photo-tile" href="assets/gallery/la-cabrona-musculosa-800.jpg" data-photo data-title="Team La Cabrona" data-kicker="Básquet / Musculosa" data-desc="Negro + azul · Llamas y nombre" data-alt="Musculosa de básquet Team La Cabrona negra con llamas azules y el nombre del equipo." data-category="Musculosa" data-cta="Pedir musculosa" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/la-cabrona-musculosa-800.jpg" srcset="assets/gallery/la-cabrona-musculosa-480.jpg 480w, assets/gallery/la-cabrona-musculosa-800.jpg 800w" sizes="(max-width: 900px) 46vw, (max-width: 1100px) 31vw, 360px" width="800" height="816" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Básquet / Musculosa</span><strong class="photo-name">Team La Cabrona</strong><span class="photo-desc">Negro + azul · Llamas y nombre</span></span>
+</a>
+<a class="photo-tile" href="assets/gallery/los-pibes-camiseta-800.jpg" data-photo data-title="Los Pibes" data-kicker="Fútbol / Camiseta" data-desc="Negro + celeste · Número 9" data-alt="Camiseta de fútbol Los Pibes negra y celeste con el número 9, apoyada sobre asfalto." data-category="Camiseta" data-cta="Pedir camiseta" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/los-pibes-camiseta-800.jpg" srcset="assets/gallery/los-pibes-camiseta-480.jpg 480w, assets/gallery/los-pibes-camiseta-800.jpg 800w" sizes="(max-width: 900px) 46vw, (max-width: 1100px) 31vw, 360px" width="800" height="805" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Fútbol / Camiseta</span><strong class="photo-name">Los Pibes</strong><span class="photo-desc">Negro + celeste · Número 9</span></span>
+</a>
+<a class="photo-tile photo-tile-rompeviento" href="assets/gallery/tovares-rompeviento-800.jpg" data-photo data-title="Tovares Rugby" data-kicker="Rugby / Rompeviento" data-desc="Rojo + negro · Capucha y cierre" data-alt="Rompeviento Tovares Rugby rojo y negro con capucha, cierre central y escudo." data-category="Rompeviento" data-cta="Pedir rompeviento" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/tovares-rompeviento-800.jpg" srcset="assets/gallery/tovares-rompeviento-480.jpg 480w, assets/gallery/tovares-rompeviento-800.jpg 800w" sizes="(max-width: 900px) 46vw, (max-width: 1100px) 31vw, 360px" width="800" height="1014" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker"><span class="kicker-prefix">Rugby / </span>Rompeviento</span><strong class="photo-name">Tovares Rugby</strong><span class="photo-desc">Rojo + negro · Capucha y cierre</span></span>
+</a>
+<a class="photo-tile" href="assets/gallery/tla-short-800.jpg" data-photo data-title="TLA · Short" data-kicker="Básquet / Short" data-desc="Negro + celeste · Número 5" data-alt="Short TLA negro y celeste con el número 5 y el escudo del equipo." data-category="Short" data-cta="Pedir short" aria-haspopup="dialog" target="_blank" rel="noopener">
+<img src="assets/gallery/tla-short-800.jpg" srcset="assets/gallery/tla-short-480.jpg 480w, assets/gallery/tla-short-800.jpg 800w" sizes="(max-width: 900px) 46vw, (max-width: 1100px) 31vw, 360px" width="800" height="793" alt="" loading="lazy" decoding="async">
+<span class="photo-shade" aria-hidden="true"></span>
+<span class="photo-zoom" aria-hidden="true">Ampliar</span>
+<span class="photo-meta"><span class="photo-kicker">Básquet / Short</span><strong class="photo-name">TLA · Short</strong><span class="photo-desc">Negro + celeste · Número 5</span></span>
 </a>
 </div>
 <div class="gallery-cta">
@@ -1154,6 +1208,7 @@ if (location.hash) setTimeout(openHashTarget, 0);
     index = (i + triggers.length) % triggers.length;
     const trigger = triggers[index];
     const full = trigger.dataset.full || trigger.getAttribute("href");
+    img.loading = "eager";
     img.classList.add("is-loading");
     img.alt = trigger.dataset.alt || "";
     img.onload = () => img.classList.remove("is-loading");
