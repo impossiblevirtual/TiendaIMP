@@ -81,6 +81,18 @@ body.glass-theme:after {
   width: min(1200px, calc(100% - 48px));
 }
 
+.glass-theme .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .glass-theme .skip-link {
   top: -76px;
   background: linear-gradient(135deg, var(--accent3), var(--accent));
@@ -1267,7 +1279,7 @@ body.glass-theme:after {
   }
 
   .glass-theme .nav-links a {
-    padding-inline: 8px;
+    padding-inline: 6px;
     font-size: 0.78rem;
   }
 }
@@ -1568,6 +1580,14 @@ body.glass-theme:after {
 }
 
 @media (max-width: 430px) {
+  body.glass-theme {
+    padding-bottom: calc(112px + env(safe-area-inset-bottom));
+  }
+
+  .glass-theme .nav-links {
+    gap: 0;
+  }
+
   .glass-theme .nav-links .nav-insta {
     display: none;
   }
@@ -1597,7 +1617,7 @@ body.glass-theme:after {
 
 @media (max-width: 350px) {
   .glass-theme .nav-links a {
-    padding: 7px 4px;
+    padding: 7px 3px;
     font-size: 0.68rem;
   }
 
