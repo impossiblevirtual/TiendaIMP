@@ -429,26 +429,27 @@ html.reveal-ready [data-reveal]{opacity:1!important;transform:none!important;tra
 <div class="chomba-feature" id="chomba">
 <div class="chomba-copy">
 <span class="tag">Nueva prenda / Microfibra W15</span>
-<h2 id="chomba-title">Chomba y conjunto con short</h2>
-<p class="chomba-lead">Tela Microfibra W15. Disponible en chomba sola o conjunto con short, en versión simple, bordada o TPU.</p>
+<h2 id="chomba-title">Chomba y Chomba + short</h2>
+<p class="chomba-lead">Tela Microfibra W15. Elegí chomba sola o chomba + short; ambas opciones están disponibles en versión simple, bordada o TPU.</p>
 <div class="chomba-details">
 <div class="chomba-detail"><strong>Bordado</strong><p>Escudo bordado con hilo.</p></div>
 <div class="chomba-detail"><strong>TPU</strong><p>Escudo con efecto de relieve 3D fabricado en poliuretano termoplástico.</p></div>
 </div>
 <div class="chomba-actions">
-<a class="btn primary" href="#arma-tu-pedido" data-order-category="Chomba">Armar pedido de chomba →</a>
+<a class="btn primary" href="#arma-tu-pedido" data-order-category="Chomba">Pedir chomba →</a>
+<a class="btn primary" href="#arma-tu-pedido" data-order-category="Chomba + short">Pedir chomba + short →</a>
 <a class="btn" href="#guia-talles">Ver tablas de talles ↗</a>
 </div>
-<p class="chomba-note">Talles confirmados: la chomba individual usa la tabla de Camiseta y el conjunto con short usa la de Camiseta + short. En el armado podés elegir moldería masculina o femenina.</p>
+<p class="chomba-note">Talles confirmados: Chomba usa la tabla de Camiseta y Chomba + short usa la de Camiseta + short. En el armado podés elegir moldería masculina o femenina.</p>
 </div>
 <div class="chomba-price-panel" aria-label="Precios de Chomba">
 <div class="chomba-price-head"><span>Variante</span><span>Precio</span></div>
 <div class="chomba-price-row"><span>Chomba</span><strong>$22.000</strong></div>
 <div class="chomba-price-row"><span>Chomba bordada</span><strong>$24.000</strong></div>
 <div class="chomba-price-row"><span>Chomba TPU</span><strong>$25.000</strong></div>
-<div class="chomba-price-row"><span>Conjunto (chomba + short)</span><strong>$30.000</strong></div>
-<div class="chomba-price-row"><span>Conjunto bordado (chomba + short)</span><strong>$33.000</strong></div>
-<div class="chomba-price-row"><span>Conjunto TPU (chomba + short)</span><strong>$35.000</strong></div>
+<div class="chomba-price-row"><span>Chomba + short (simple)</span><strong>$30.000</strong></div>
+<div class="chomba-price-row"><span>Chomba + short (bordado)</span><strong>$33.000</strong></div>
+<div class="chomba-price-row"><span>Chomba + short (TPU)</span><strong>$35.000</strong></div>
 <p class="chomba-price-note">Precios en pesos argentinos por unidad. La seña es del 50% del total.</p>
 </div>
 </div>
@@ -532,8 +533,9 @@ const categories = [
   {name:"Camiseta",options:[["Simple",17000],["Bordada",19000]]},
   {name:"Musculosa",options:[["Simple",17000],["Bordada",19000]]},
   {name:"Short",options:[["Simple",15000],["Bordado",16500],["Simple con bolsillo",16000],["Bordado con bolsillo",17500]]},
-  /* Chomba reutiliza las tablas existentes: individual -> Camiseta; conjunto -> Camiseta + short. */
-  {name:"Chomba",options:[["Chomba",22000],["Chomba bordada",24000],["Chomba TPU",25000],["Conjunto (chomba + short)",30000],["Conjunto bordado (chomba + short)",33000],["Conjunto TPU (chomba + short)",35000]]},
+  /* Chomba y Chomba + short reutilizan las tablas existentes: individual -> Camiseta; conjunto -> Camiseta + short. */
+  {name:"Chomba",options:[["Chomba",22000],["Chomba bordada",24000],["Chomba TPU",25000]]},
+  {name:"Chomba + short",options:[["Simple",30000],["Bordado",33000],["TPU",35000]]},
   {name:"Camiseta + short",options:[["Simple",25000],["Bordado",27000],["Simple + short con bolsillo",26000],["Bordado + short con bolsillo",28000]]},
   {name:"Musculosa + short",options:[["Simple",25000],["Bordado",27000],["Simple + short con bolsillo",26000],["Bordado + short con bolsillo",28000]]},
   {name:"Buzo",options:[["Simple",28000],["Bordado",29000]]},
@@ -580,33 +582,28 @@ function getBaseProduct(name) {
 }
 
 /* Chomba no duplica tablas: individual -> Camiseta; conjunto -> Camiseta + short. */
-const CHOMBA_SET_VARIANTS = ["Conjunto (chomba + short)","Conjunto bordado (chomba + short)","Conjunto TPU (chomba + short)"];
-
-function isChombaSetVariant(variantName) {
-  return CHOMBA_SET_VARIANTS.includes(variantName);
+function getEquivalentCategory(name) {
+  if (name === "Chomba") return "Camiseta";
+  if (name === "Chomba + short") return "Camiseta + short";
+  return name;
 }
 
-function getEquivalentCategory(name, variantName) {
-  if (name !== "Chomba") return name;
-  return isChombaSetVariant(variantName) ? "Camiseta + short" : "Camiseta";
-}
-
-function getSizeChart(name, mold, variantName) {
+function getSizeChart(name, mold) {
   if (name === "Bandera" || PENDING_CHART_CATEGORIES.includes(name)) return null;
-  const equivalent = getEquivalentCategory(name, variantName);
+  const equivalent = getEquivalentCategory(name);
   return sizeCharts[equivalent + "|" + mold] || sizeCharts[getBaseProduct(equivalent) + "|" + mold] || null;
 }
 
 function getMoldOptions(name) {
-  if (name === "Camiseta" || name === "Musculosa" || name === "Camiseta + short" || name === "Musculosa + short" || name === "Chomba" || name === "Short") {
+  if (name === "Camiseta" || name === "Musculosa" || name === "Camiseta + short" || name === "Musculosa + short" || name === "Chomba" || name === "Chomba + short" || name === "Short") {
     return ["Masculina","Femenina"];
   }
   if (name === "Bandera") return ["No aplica"];
   return ["Unisex"];
 }
 
-function getGuideId(name, mold, variantName) {
-  const equivalent = getEquivalentCategory(name, variantName);
+function getGuideId(name, mold) {
+  const equivalent = getEquivalentCategory(name);
   return GUIDE_IDS[equivalent + "|" + mold] || GUIDE_IDS[getBaseProduct(equivalent) + "|" + mold] || "tablas-pendientes";
 }
 
@@ -890,9 +887,11 @@ function orderAddRow() {
     const previousCategory = row.dataset.category || "";
     const previousQty = captureQuantities();
     const previousNames = captureNames();
-    const previousNamesChecked = !!sizes.querySelector(".shirt-name-toggle")?.checked;
+    const previousNameToggle = sizes.querySelector(".shirt-name-toggle");
+    const previousNamesChecked = !!previousNameToggle && previousNameToggle.checked;
+    const previousBanderaInput = sizes.querySelector('input[type="number"]');
     const previousBanderaQty = previousCategory === "Bandera"
-      ? Math.max(0,parseInt(sizes.querySelector('input[type="number"]')?.value || "0",10) || 0)
+      ? Math.max(0,parseInt(previousBanderaInput ? previousBanderaInput.value : "0",10) || 0)
       : null;
 
     sizes.innerHTML = "";
@@ -901,8 +900,6 @@ function orderAddRow() {
 
     const category = selectedOrderCategory();
     const selectedName = category.name;
-    const selectedVariantOption = category.options[Number(variant.value)];
-    const selectedVariantName = selectedVariantOption ? selectedVariantOption[0] : "";
     row.dataset.category = selectedName;
 
     if (selectedName === "Bandera") {
@@ -921,7 +918,7 @@ function orderAddRow() {
       inp.min = "0";
       inp.step = "1";
       inp.inputMode = "numeric";
-      inp.value = String(previousBanderaQty ?? 0);
+      inp.value = String(previousBanderaQty == null ? 0 : previousBanderaQty);
       inp.setAttribute("aria-label","Cantidad de banderas");
       const selectedVariant = category.options[Number(variant.value)];
       inp.dataset.size = selectedVariant ? selectedVariant[0] : "Bandera";
@@ -935,7 +932,7 @@ function orderAddRow() {
       return;
     }
 
-    let chart = getSizeChart(selectedName,mold.value,selectedVariantName);
+    let chart = getSizeChart(selectedName,mold.value);
     if (!chart && !PENDING_CHART_CATEGORIES.includes(selectedName)) {
       row.dataset.needsChart = "true";
       row.dataset.qty = "0";
@@ -978,10 +975,12 @@ function orderAddRow() {
     row.dataset.needsChart = "false";
     const link = document.createElement("a");
     link.className = "size-guide-link";
-    link.href = "#" + getGuideId(selectedName,mold.value,selectedVariantName);
+    link.href = "#" + getGuideId(selectedName,mold.value);
     link.textContent = selectedName === "Chomba"
-      ? (isChombaSetVariant(selectedVariantName) ? "Ver tabla de talles de Camiseta + short ↗" : "Ver tabla de talles de Camiseta ↗")
-      : (PENDING_CHART_CATEGORIES.includes(selectedName) ? "Consultar medidas por WhatsApp ↗" : "Ver tabla de talles de esta prenda ↗");
+      ? "Ver tabla de talles de Camiseta ↗"
+      : (selectedName === "Chomba + short"
+        ? "Ver tabla de talles de Camiseta + short ↗"
+        : (PENDING_CHART_CATEGORIES.includes(selectedName) ? "Consultar medidas por WhatsApp ↗" : "Ver tabla de talles de esta prenda ↗"));
     if (PENDING_CHART_CATEGORIES.includes(selectedName)) {
       link.href = whatsappUrl("Hola, Impossible. Quiero confirmar las medidas de " + selectedName + " antes de confirmar el pedido.");
       link.target = "_blank";
@@ -999,10 +998,10 @@ function orderAddRow() {
       pendingNote.textContent = "Podés cargar cantidades por talle de referencia desde T0 hasta 5XL. Las medidas reales de esta prenda deben confirmarse por WhatsApp antes de producir.";
       sizes.appendChild(pendingNote);
     }
-    if (selectedName === "Chomba") {
+    if (selectedName === "Chomba" || selectedName === "Chomba + short") {
       const chombaNote = document.createElement("p");
       chombaNote.className = "fineprint";
-      chombaNote.textContent = isChombaSetVariant(selectedVariantName)
+      chombaNote.textContent = selectedName === "Chomba + short"
         ? "Conjunto chomba + short: usá la tabla de Camiseta + short. Cargá la cantidad por talle del conjunto completo."
         : "Chomba individual: usá la tabla de Camiseta. Elegí moldería masculina o femenina.";
       sizes.appendChild(chombaNote);
@@ -1098,7 +1097,7 @@ function orderAddRow() {
   });
   variant.addEventListener("change",() => {
     const categoryName = selectedOrderCategory().name;
-    if (categoryName === "Bandera" || categoryName === "Chomba") sizesRender();
+    if (categoryName === "Bandera") sizesRender();
     else lineUpdate();
   });
   mold.addEventListener("change",sizesRender);
@@ -1163,7 +1162,7 @@ document.getElementById("order-send-whatsapp").addEventListener("click",() => {
     if (!category) return;
     const item = category.options[Number(variant.value)];
     if (!item) return;
-    if (row.dataset.needsChart === "true" || (!getSizeChart(category.name,mold.value,item[0]) && category.name !== "Bandera" && !PENDING_CHART_CATEGORIES.includes(category.name))) {
+    if (row.dataset.needsChart === "true" || (!getSizeChart(category.name,mold.value) && category.name !== "Bandera" && !PENDING_CHART_CATEGORIES.includes(category.name))) {
       blocked.push(category.name);
       return;
     }
@@ -1376,10 +1375,12 @@ document.querySelectorAll("[data-order-category]").forEach(link => {
     const name = link.dataset.orderCategory;
     if (!name) return;
     let row = document.querySelector("#order-rows .order-row");
+    const firstNameInput = row ? row.querySelector(".shirt-name-input") : null;
+    const nameToggle = row ? row.querySelector(".shirt-name-toggle") : null;
     const hasData = row && (
       Number(row.dataset.qty || 0) > 0 ||
-      !!row.querySelector(".shirt-name-input")?.value.trim() ||
-      !!row.querySelector(".shirt-name-toggle")?.checked
+      !!(firstNameInput && firstNameInput.value.trim()) ||
+      !!(nameToggle && nameToggle.checked)
     );
     if (!row || hasData) {
       orderAddRow();
