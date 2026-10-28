@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pruebas · Chomba y Chomba + short</title>
+<style>
+  :root { color-scheme: dark; --ok:#55d6a6; --bad:#ff7b7b; --muted:#9bb5b7; --line:#2a3a3a; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:24px; background:#07100f; color:#f4fbfa; font:15px/1.5 system-ui,Segoe UI,Arial,sans-serif; }
+  h1 { margin:0 0 6px; font-size:1.45rem; }
+  p { margin:0 0 14px; color:var(--muted); }
+  button { border:1px solid #58dccd; border-radius:6px; background:#0d1a18; color:#f4fbfa; padding:9px 14px; font:inherit; cursor:pointer; }
+  #summary { margin:16px 0; font-weight:800; }
+  #results { display:grid; gap:8px; max-width:980px; }
+  .test { border:1px solid var(--line); border-radius:8px; padding:10px 12px; background:#0b1513; }
+  .test.ok { border-color:rgba(85,214,166,.45); }
+  .test.bad { border-color:rgba(255,123,123,.55); }
+  .test strong { display:block; }
+  .test small { color:var(--muted); white-space:pre-wrap; }
+  iframe { width:1280px; height:900px; border:1px solid var(--line); border-radius:8px; background:#fff; }
+  .frame-wrap { overflow:auto; max-width:100%; margin-top:18px; }
+</style>
+</head>
+<body>
+<h1>Pruebas de Chomba y Chomba + short</h1>
+<p>Se ejecutan contra <code>../impossible/index.html</code>. Serví el repositorio por HTTP (por ejemplo, desde la raíz) y abrí esta página; no funciona con <code>file://</code> por el iframe.</p>
+<button id="run" type="button">Volver a ejecutar</button>
+<div id="summary">Ejecutando…</div>
+<div id="results"></div>
+<div class="frame-wrap"><iframe id="app" title="Aplicación Impossible para pruebas"></iframe></div>
+<script>
+(() => {
+  const iframe = document.getElementById("app");
+  const resultsEl = document.getElementById("results");
+  const summaryEl = document.getElementById("summary");
+  const runButton = document.getElementById("run");
+  let win, doc;
+  const results = [];
+
+  const formatARS = n => new Intl.NumberFormat("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:0}).format(n);
+  const clean = text => String(text == null ? "" : text).replace(/\u00a0/g," ").trim();
+
+  function assert(condition, message) {
+    if (!condition) throw new Error(message);
+  }
+
+  function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function waitFor(check, timeout = 5000) {
+    const started = Date.now();
+    while (Date.now() - started < timeout) {
+      if (check()) return;
+      await wait(50);
+    }
+    throw new Error("Tiempo de espera agotado");
+  }
+
+  function event(type) {
+    return new win.Event(type,{bubbles:true});
+  }
+
+  function setSelect(el, value) {
+    assert(el, "No se encontró el selector");
+    el.value = String(value);
+    el.dispatchEvent(event("change"));
+  }
+
+  function optionByName(select, name) {
+    return [...select.options].find(o => clean(o.textContent).split(" - ")[0] === name);
+  }
+
+  function calcRow() {
+    return doc.querySelector("#calc-rows .calc-row");
+  }
+
+  function orderRow() {
+    return doc.querySelector("#order-rows .order-row");
+  }
+
+  function resetCalc() {
+    doc.getElementById("reset-calc").click();
+    assert(calcRow(), "La calculadora no creó una fila");
+  }
+
+  function resetOrder() {
+    doc.getElementById("order-reset").click();
+    assert(orderRow(), "El armado de pedido no creó una fila");
+  }
+
+  function selectCalc(productName, variantIndex, qty) {
+    resetCalc();
+    const row = calcRow();
+    const product = row.querySelector(".product-select");
+    const productOption = optionByName(product, productName);
+    assert(productOption, "No aparece la prenda " + productName + " en la calculadora");
+    setSelect(product, productOption.value);
+    const variant = row.querySelector('select[aria-label="Elegí el tipo"]');
+    setSelect(variant, variantIndex);
+    const qtyInput = row.querySelector('input[type="number"]');
+    qtyInput.value = String(qty);
+    qtyInput.dispatchEvent(event("input"));
+    return {
+      row,
+      amount: clean(row.querySelector(".price-cell").textContent),
+      total: clean(doc.getElementById("grand-total").textContent),
+      deposit: clean(doc.getElementById("deposit").textContent)
+    };
+  }
+
+  function selectOrder(productName, variantIndex) {
+    resetOrder();
+    const row = orderRow();
+    const selects = [...row.querySelectorAll(".order-controls select")];
+    const product = selects[0];
+    const productOption = optionByName(product, productName);
+    assert(productOption, "No aparece la prenda " + productName + " en el pedido");
+    setSelect(product, productName);
+    setSelect(selects[1], variantIndex);
+    return row;
+  }
+
+  function setOrderQty(row, qty) {
+    const input = row.querySelector('.size-qty-grid input[type="number"]');
+    assert(input, "No se encontró la grilla de talles");
+    input.value = String(qty);
+    input.dispatchEvent(event("input"));
+  }
+
+  function orderTotals(row) {
+    return {
+      line: clean(row.querySelector(".order-line-total").textContent),
+      total: clean(doc.getElementById("order-total").textContent),
+      deposit: clean(doc.getElementById("order-deposit").textContent),
+      count: clean(doc.getElementById("order-count").textContent),
+      hint: clean(doc.getElementById("order-minimum-hint").textContent)
+    };
+  }
+
+  async function test(name, fn) {
+    try {
+      await fn();
+      results.push({name, ok:true, detail:"OK"});
+    } catch (error) {
+      results.push({name, ok:false, detail:error && error.message ? error.message : String(error)});
+    }
+  }
+
+  function render() {
+    const passed = results.filter(r => r.ok).length;
+    const failed = results.length - passed;
+    summaryEl.textContent = passed + " prueba(s) aprobada(s) · " + failed + " fallida(s)";
+    summaryEl.style.color = failed ? "var(--bad)" : "var(--ok)";
+    resultsEl.innerHTML = "";
+    results.forEach(result => {
+      const div = document.createElement("div");
+      div.className = "test " + (result.ok ? "ok" : "bad");
+      const strong = document.createElement("strong");
+      strong.textContent = (result.ok ? "✓ " : "✗ ") + result.name;
+      const small = document.createElement("small");
+      small.textContent = result.detail;
+      div.append(strong,small);
+      resultsEl.appendChild(div);
+    });
+    window.__chombaTestResults = {passed,failed,results};
+  }
+
+  async function run() {
+    results.length = 0;
+    summaryEl.textContent = "Ejecutando…";
+    summaryEl.style.color = "var(--muted)";
+    resultsEl.innerHTML = "";
+    iframe.style.width = "1280px";
+    iframe.style.height = "900px";
+    iframe.src = "about:blank";
+    await wait(40);
+    iframe.src = "../impossible/index.html?test=" + Date.now();
+    await waitFor(() => {
+      try {
+        return iframe.contentDocument &&
+          iframe.contentDocument.querySelectorAll("#calc-rows .calc-row").length > 0 &&
+          iframe.contentDocument.querySelectorAll("#order-rows .order-row").length > 0;
+      } catch (_) {
+        return false;
+      }
+    }, 8000);
+    win = iframe.contentWindow;
+    doc = iframe.contentDocument;
+
+    const chomba = [["Chomba",22000],["Chomba bordada",24000],["Chomba TPU",25000]];
+    const set = [["Simple",30000],["Bordado",33000],["TPU",35000]];
+
+    await test("La prenda Chomba + short aparece en los dos selectores", async () => {
+      resetCalc();
+      const calcProducts = [...calcRow().querySelector(".product-select").options].map(o => clean(o.textContent));
+      assert(calcProducts.includes("Chomba + short"), "Falta Chomba + short en la calculadora");
+      assert(calcProducts.includes("Chomba"), "Falta Chomba en la calculadora");
+      resetOrder();
+      const orderProducts = [...orderRow().querySelectorAll(".order-controls select")[0].options].map(o => clean(o.textContent));
+      assert(orderProducts.includes("Chomba + short"), "Falta Chomba + short en el pedido");
+      assert(orderProducts.includes("Chomba"), "Falta Chomba en el pedido");
+    });
+
+    await test("Los seis precios están publicados en la calculadora", async () => {
+      for (const [name, price] of [...chomba, ...set]) {
+        const productName = chomba.some(x => x[0] === name) ? "Chomba" : "Chomba + short";
+        const variantIndex = (productName === "Chomba" ? chomba : set).findIndex(x => x[0] === name);
+        const out = selectCalc(productName, variantIndex, 1);
+        assert(out.amount === clean(formatARS(price)), name + ": precio esperado " + formatARS(price) + ", obtenido " + out.amount);
+      }
+    });
+
+    await test("Cantidades, total y seña en la calculadora", async () => {
+      for (const [name, price] of [...chomba, ...set]) {
+        const productName = chomba.some(x => x[0] === name) ? "Chomba" : "Chomba + short";
+        const variantIndex = (productName === "Chomba" ? chomba : set).findIndex(x => x[0] === name);
+        const out = selectCalc(productName, variantIndex, 2);
+        const amount = price * 2;
+        assert(out.amount === clean(formatARS(amount)), name + ": importe incorrecto");
+        assert(out.total === clean(formatARS(amount)), name + ": total incorrecto");
+        assert(out.deposit === clean(formatARS(Math.round(amount / 2))), name + ": seña incorrecta");
+      }
+    });
+
+    await test("Las seis variantes cargan talles y total en Armá tu pedido", async () => {
+      for (const [name, price] of [...chomba, ...set]) {
+        const productName = chomba.some(x => x[0] === name) ? "Chomba" : "Chomba + short";
+        const variantIndex = (productName === "Chomba" ? chomba : set).findIndex(x => x[0] === name);
+        const row = selectOrder(productName, variantIndex);
+        assert(row.dataset.needsChart === "false", name + ": la tabla quedó bloqueada");
+        const guide = row.querySelector(".size-guide-link");
+        assert(guide, name + ": falta el enlace de tabla");
+        if (productName === "Chomba + short") {
+          assert(clean(guide.textContent).includes("Camiseta + short"), name + ": guía incorrecta");
+        } else {
+          assert(clean(guide.textContent).includes("Camiseta"), name + ": guía incorrecta");
+        }
+        setOrderQty(row, 10);
+        const t = orderTotals(row);
+        assert(t.count === "10", name + ": cantidad total incorrecta");
+        assert(t.total === clean(formatARS(price * 10)), name + ": total incorrecto");
+        assert(t.deposit === clean(formatARS(Math.round(price * 10 / 2))), name + ": seña incorrecta");
+        assert(t.line.includes(clean(formatARS(price * 10))), name + ": importe de línea incorrecto");
+        assert(t.hint.includes("mínimo de 10"), name + ": no se informó el mínimo");
+      }
+    });
+
+    await test("El botón Pedir chomba + short preselecciona la prenda y sus variantes", async () => {
+      resetOrder();
+      const cta = doc.querySelector('a[data-order-category="Chomba + short"]');
+      assert(cta, "Falta el botón Pedir chomba + short");
+      cta.click();
+      await wait(20);
+      const row = orderRow();
+      const selects = [...row.querySelectorAll(".order-controls select")];
+      assert(selects[0].value === "Chomba + short", "No se seleccionó Chomba + short");
+      const variants = [...selects[1].options].map(o => clean(o.textContent).split(/\s+[—–-]\s+/)[0]);
+      assert(variants.join("|") === "Simple|Bordado|TPU", "Variantes inesperadas: " + variants.join(", "));
+    });
+
+    await test("El mínimo de 10 prendas bloquea el envío", async () => {
+      const row = selectOrder("Chomba + short", 1);
+      doc.getElementById("order-client-name").value = "Equipo de prueba";
+      setOrderQty(row, 9);
+      let message = "";
+      let opened = "";
+      const oldAlert = win.alert;
+      const oldOpen = win.open;
+      win.alert = msg => { message = String(msg); };
+      win.open = url => { opened = String(url); return null; };
+      try {
+        doc.getElementById("order-send-whatsapp").click();
+        await wait(20);
+      } finally {
+        win.alert = oldAlert;
+        win.open = oldOpen;
+      }
+      assert(!opened, "Se abrió WhatsApp con menos de 10 prendas");
+      assert(message.includes("mínimo") && message.includes("10"), "No se informó el mínimo: " + message);
+    });
+
+    await test("Sin cliente/equipo no se envía el pedido", async () => {
+      const row = selectOrder("Chomba + short", 0);
+      setOrderQty(row, 10);
+      doc.getElementById("order-client-name").value = "";
+      let message = "";
+      let opened = "";
+      const oldAlert = win.alert;
+      const oldOpen = win.open;
+      win.alert = msg => { message = String(msg); };
+      win.open = url => { opened = String(url); return null; };
+      try {
+        doc.getElementById("order-send-whatsapp").click();
+        await wait(20);
+      } finally {
+        win.alert = oldAlert;
+        win.open = oldOpen;
+      }
+      assert(!opened, "Se abrió WhatsApp sin cliente/equipo");
+      assert(message.includes("cliente o equipo"), "No se pidió el nombre del cliente/equipo: " + message);
+    });
+
+    await test("Chomba + short se conserva en el resumen, el Excel y WhatsApp", async () => {
+      const row = selectOrder("Chomba + short", 1);
+      doc.getElementById("order-client-name").value = "Equipo de prueba";
+      setOrderQty(row, 10);
+      const captured = {url:"",alert:"",workbook:null,download:""};
+      const oldAlert = win.alert;
+      const oldOpen = win.open;
+      const oldAnchorClick = win.HTMLAnchorElement.prototype.click;
+      const oldWrite = win.XLSX && win.XLSX.write;
+      win.alert = msg => { captured.alert = String(msg); };
+      win.open = url => { captured.url = String(url); return null; };
+      win.HTMLAnchorElement.prototype.click = function() {
+        if (this.download && /\.xlsx$/i.test(this.download)) {
+          captured.download = this.download;
+          return;
+        }
+        return oldAnchorClick.call(this);
+      };
+      if (win.XLSX && oldWrite) {
+        win.XLSX.write = function(workbook, opts) {
+          captured.workbook = workbook;
+          return oldWrite.call(this, workbook, opts);
+        };
+      }
+      try {
+        doc.getElementById("order-send-whatsapp").click();
+        await wait(50);
+      } finally {
+        win.alert = oldAlert;
+        win.open = oldOpen;
+        win.HTMLAnchorElement.prototype.click = oldAnchorClick;
+        if (win.XLSX && oldWrite) win.XLSX.write = oldWrite;
+      }
+      assert(!captured.alert, "El envío se bloqueó: " + captured.alert);
+      assert(captured.url, "No se generó el mensaje de WhatsApp");
+      const text = new URL(captured.url).searchParams.get("text") || "";
+      assert(text.includes("Chomba + short"), "WhatsApp no incluye Chomba + short");
+      assert(text.includes("Variante: Bordado"), "WhatsApp no incluye la variante bordado");
+      assert(text.includes("Unidades: 10"), "WhatsApp no incluye 10 unidades");
+      assert(text.includes("330.000"), "WhatsApp no incluye el total");
+      assert(text.includes("165.000"), "WhatsApp no incluye la seña");
+      assert(captured.download && captured.download.endsWith(".xlsx"), "No se generó el archivo Excel");
+      assert(captured.workbook, "No se capturó el libro Excel");
+      const rows = win.XLSX.utils.sheet_to_json(captured.workbook.Sheets.Pedido,{header:1,defval:""});
+      const productRow = rows.find(r => r[0] === "Chomba + short");
+      assert(productRow, "El Excel no incluye Chomba + short");
+      assert(productRow[1] === "Bordado", "El Excel no incluye la variante bordado");
+      assert(Number(productRow[4]) === 10, "El Excel no incluye 10 unidades");
+      assert(Number(productRow[6]) === 33000, "El Excel no incluye el precio unitario");
+      assert(Number(productRow[7]) === 330000, "El Excel no incluye el subtotal");
+      const totalRow = rows.find(r => r[0] === "TOTAL ESTIMADO (ARS)");
+      const depositRow = rows.find(r => String(r[0]).includes("SEÑA ESTIMADA"));
+      assert(totalRow && Number(totalRow[1]) === 330000, "El Excel no incluye el total");
+      assert(depositRow && Number(depositRow[1]) === 165000, "El Excel no incluye la seña");
+    });
+
+    await test("La página mantiene los selectores en móvil y escritorio", async () => {
+      iframe.style.width = "390px";
+      await wait(120);
+      assert(win.getComputedStyle(doc.querySelector(".chomba-actions")).display === "grid", "En móvil no se apilan los botones de Chomba");
+      const mobileProducts = [...orderRow().querySelectorAll(".order-controls select")[0].options].map(o => clean(o.textContent));
+      assert(mobileProducts.includes("Chomba + short"), "En móvil falta Chomba + short");
+      iframe.style.width = "1280px";
+      await wait(120);
+      assert(win.getComputedStyle(doc.querySelector(".chomba-actions")).display === "flex", "En escritorio no se alinean los botones de Chomba");
+      const desktopProducts = [...orderRow().querySelectorAll(".order-controls select")[0].options].map(o => clean(o.textContent));
+      assert(desktopProducts.includes("Chomba + short"), "En escritorio falta Chomba + short");
+    });
+
+    render();
+  }
+
+  runButton.addEventListener("click", run);
+  run();
+})();
+</script>
+</body>
+</html>
