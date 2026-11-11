@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pruebas · Chomba y Chomba + short</title>
+<title>Pruebas · Chomba, cuello en V y Rompeviento</title>
 <style>
   :root { color-scheme: dark; --ok:#55d6a6; --bad:#ff7b7b; --muted:#9bb5b7; --line:#2a3a3a; }
   * { box-sizing: border-box; }
@@ -23,7 +23,7 @@
 </style>
 </head>
 <body>
-<h1>Pruebas de Chomba y Chomba + short</h1>
+<h1>Pruebas de Chomba, cuello en V y Rompeviento</h1>
 <p>Se ejecutan contra <code>../impossible/index.html</code>. Serví el repositorio por HTTP (por ejemplo, desde la raíz) y abrí esta página; no funciona con <code>file://</code> por el iframe.</p>
 <button id="run" type="button">Volver a ejecutar</button>
 <div id="summary">Ejecutando…</div>
@@ -139,6 +139,51 @@
     };
   }
 
+  async function sendOrder(entries) {
+    resetOrder();
+    doc.getElementById("order-client-name").value = "Equipo de prueba";
+    entries.forEach((entry, index) => {
+      if (index > 0) doc.getElementById("order-add").click();
+      const row = [...doc.querySelectorAll("#order-rows .order-row")][index];
+      assert(row, "No se creó la fila " + (index + 1));
+      const selects = [...row.querySelectorAll(".order-controls select")];
+      setSelect(selects[0], entry.product);
+      setSelect(selects[1], entry.index);
+      setOrderQty(row, entry.qty);
+    });
+    const captured = {url:"",alert:"",workbook:null,download:"",text:""};
+    const oldAlert = win.alert;
+    const oldOpen = win.open;
+    const oldAnchorClick = win.HTMLAnchorElement.prototype.click;
+    const oldWrite = win.XLSX && win.XLSX.write;
+    win.alert = msg => { captured.alert = String(msg); };
+    win.open = url => { captured.url = String(url); return null; };
+    win.HTMLAnchorElement.prototype.click = function() {
+      if (this.download && /\.xlsx$/i.test(this.download)) {
+        captured.download = this.download;
+        return;
+      }
+      return oldAnchorClick.call(this);
+    };
+    if (win.XLSX && oldWrite) {
+      win.XLSX.write = function(workbook, opts) {
+        captured.workbook = workbook;
+        return oldWrite.call(this, workbook, opts);
+      };
+    }
+    try {
+      doc.getElementById("order-send-whatsapp").click();
+      await wait(50);
+    } finally {
+      win.alert = oldAlert;
+      win.open = oldOpen;
+      win.HTMLAnchorElement.prototype.click = oldAnchorClick;
+      if (win.XLSX && oldWrite) win.XLSX.write = oldWrite;
+    }
+    captured.text = captured.url ? (new URL(captured.url).searchParams.get("text") || "") : "";
+    return captured;
+  }
+
   async function test(name, fn) {
     try {
       await fn();
@@ -189,75 +234,110 @@
     win = iframe.contentWindow;
     doc = iframe.contentDocument;
 
-    const chomba = [["Chomba",22000],["Chomba bordada",24000],["Chomba TPU",25000]];
-    const set = [["Simple",30000],["Bordado",33000],["TPU",35000]];
+    const groups = [
+      {product:"Chomba",variants:[["Chomba",22000],["Chomba bordada",24000],["Chomba TPU",25000]]},
+      {product:"Chomba + short",variants:[["Simple",30000],["Bordado",33000],["TPU",35000],["Simple con bolsillo",32000],["Bordado con bolsillo",35000],["TPU con bolsillo",37000]]},
+      {product:"Chomba cuello en V",variants:[["Chomba cuello en V",21000],["Chomba cuello en V bordado",23500],["Chomba cuello en V TPU",24500]]},
+      {product:"Chomba cuello en V + short",variants:[["Simple",29500],["Bordado",32500],["TPU",34500],["Simple con bolsillo",31500],["Bordado con bolsillo",34500],["TPU con bolsillo",36500]]},
+      {product:"Rompeviento",variants:[["Simple",32000],["Simple bordado",35000],["Reversible",46000],["Reversible bordado",49000]]}
+    ];
+    const cases = groups.flatMap(group => group.variants.map(([variant,price],index) => ({product:group.product,variant,price,index})));
+    const productNames = groups.map(group => group.product);
+    const isChombaSet = product => product === "Chomba + short" || product === "Chomba cuello en V + short";
+    const isChombaIndividual = product => product === "Chomba" || product === "Chomba cuello en V";
 
-    await test("La prenda Chomba + short aparece en los dos selectores", async () => {
+    await test("Todas las prendas nuevas aparecen en los dos selectores", async () => {
       resetCalc();
       const calcProducts = [...calcRow().querySelector(".product-select").options].map(o => clean(o.textContent));
-      assert(calcProducts.includes("Chomba + short"), "Falta Chomba + short en la calculadora");
-      assert(calcProducts.includes("Chomba"), "Falta Chomba en la calculadora");
       resetOrder();
       const orderProducts = [...orderRow().querySelectorAll(".order-controls select")[0].options].map(o => clean(o.textContent));
-      assert(orderProducts.includes("Chomba + short"), "Falta Chomba + short en el pedido");
-      assert(orderProducts.includes("Chomba"), "Falta Chomba en el pedido");
+      for (const name of productNames) {
+        assert(calcProducts.includes(name), "Falta " + name + " en la calculadora");
+        assert(orderProducts.includes(name), "Falta " + name + " en el pedido");
+      }
     });
 
-    await test("Los seis precios están publicados en la calculadora", async () => {
-      for (const [name, price] of [...chomba, ...set]) {
-        const productName = chomba.some(x => x[0] === name) ? "Chomba" : "Chomba + short";
-        const variantIndex = (productName === "Chomba" ? chomba : set).findIndex(x => x[0] === name);
-        const out = selectCalc(productName, variantIndex, 1);
-        assert(out.amount === clean(formatARS(price)), name + ": precio esperado " + formatARS(price) + ", obtenido " + out.amount);
+    await test("Los precios publicados coinciden en la calculadora", async () => {
+      for (const item of cases) {
+        const out = selectCalc(item.product, item.index, 1);
+        assert(out.amount === clean(formatARS(item.price)), item.product + " / " + item.variant + ": precio esperado " + formatARS(item.price) + ", obtenido " + out.amount);
       }
     });
 
     await test("Cantidades, total y seña en la calculadora", async () => {
-      for (const [name, price] of [...chomba, ...set]) {
-        const productName = chomba.some(x => x[0] === name) ? "Chomba" : "Chomba + short";
-        const variantIndex = (productName === "Chomba" ? chomba : set).findIndex(x => x[0] === name);
-        const out = selectCalc(productName, variantIndex, 2);
-        const amount = price * 2;
-        assert(out.amount === clean(formatARS(amount)), name + ": importe incorrecto");
-        assert(out.total === clean(formatARS(amount)), name + ": total incorrecto");
-        assert(out.deposit === clean(formatARS(Math.round(amount / 2))), name + ": seña incorrecta");
+      for (const item of cases) {
+        const out = selectCalc(item.product, item.index, 2);
+        const amount = item.price * 2;
+        assert(out.amount === clean(formatARS(amount)), item.product + " / " + item.variant + ": importe incorrecto");
+        assert(out.total === clean(formatARS(amount)), item.product + " / " + item.variant + ": total incorrecto");
+        assert(out.deposit === clean(formatARS(Math.round(amount / 2))), item.product + " / " + item.variant + ": seña incorrecta");
       }
     });
 
-    await test("Las seis variantes cargan talles y total en Armá tu pedido", async () => {
-      for (const [name, price] of [...chomba, ...set]) {
-        const productName = chomba.some(x => x[0] === name) ? "Chomba" : "Chomba + short";
-        const variantIndex = (productName === "Chomba" ? chomba : set).findIndex(x => x[0] === name);
-        const row = selectOrder(productName, variantIndex);
-        assert(row.dataset.needsChart === "false", name + ": la tabla quedó bloqueada");
+    await test("Las variantes cargan talles y total en Armá tu pedido", async () => {
+      for (const item of cases) {
+        const row = selectOrder(item.product, item.index);
+        assert(row.dataset.needsChart === "false", item.product + " / " + item.variant + ": la tabla quedó bloqueada");
         const guide = row.querySelector(".size-guide-link");
-        assert(guide, name + ": falta el enlace de tabla");
-        if (productName === "Chomba + short") {
-          assert(clean(guide.textContent).includes("Camiseta + short"), name + ": guía incorrecta");
-        } else {
-          assert(clean(guide.textContent).includes("Camiseta"), name + ": guía incorrecta");
+        assert(guide, item.product + " / " + item.variant + ": falta el enlace de tabla");
+        if (isChombaSet(item.product)) {
+          assert(clean(guide.textContent).includes("Camiseta + short"), item.product + " / " + item.variant + ": guía incorrecta");
+        } else if (isChombaIndividual(item.product)) {
+          assert(clean(guide.textContent).includes("Camiseta"), item.product + " / " + item.variant + ": guía incorrecta");
         }
         setOrderQty(row, 10);
         const t = orderTotals(row);
-        assert(t.count === "10", name + ": cantidad total incorrecta");
-        assert(t.total === clean(formatARS(price * 10)), name + ": total incorrecto");
-        assert(t.deposit === clean(formatARS(Math.round(price * 10 / 2))), name + ": seña incorrecta");
-        assert(t.line.includes(clean(formatARS(price * 10))), name + ": importe de línea incorrecto");
-        assert(t.hint.includes("mínimo de 10"), name + ": no se informó el mínimo");
+        assert(t.count === "10", item.product + " / " + item.variant + ": cantidad total incorrecta");
+        assert(t.total === clean(formatARS(item.price * 10)), item.product + " / " + item.variant + ": total incorrecto");
+        assert(t.deposit === clean(formatARS(Math.round(item.price * 10 / 2))), item.product + " / " + item.variant + ": seña incorrecta");
+        assert(t.line.includes(clean(formatARS(item.price * 10))), item.product + " / " + item.variant + ": importe de línea incorrecto");
+        assert(t.hint.includes("mínimo de 10"), item.product + " / " + item.variant + ": no se informó el mínimo");
       }
     });
 
-    await test("El botón Pedir chomba + short preselecciona la prenda y sus variantes", async () => {
+    await test("El panel visible publica los precios nuevos", async () => {
+      const panel = clean(doc.querySelector(".chomba-price-panel").textContent);
+      const expected = [
+        ["Chomba + short con bolsillo (simple)","$32.000"],
+        ["Chomba + short con bolsillo (bordado)","$35.000"],
+        ["Chomba + short con bolsillo (TPU)","$37.000"],
+        ["Chomba cuello en V","$21.000"],
+        ["Chomba cuello en V bordado","$23.500"],
+        ["Chomba cuello en V TPU","$24.500"],
+        ["Chomba cuello en V + short","$29.500"],
+        ["Chomba cuello en V + short (bordado)","$32.500"],
+        ["Chomba cuello en V + short (TPU)","$34.500"],
+        ["Chomba cuello en V + short con bolsillo (simple)","$31.500"],
+        ["Chomba cuello en V + short con bolsillo (bordado)","$34.500"],
+        ["Chomba cuello en V + short con bolsillo (TPU)","$36.500"]
+      ];
+      for (const [label,price] of expected) {
+        assert(panel.includes(label) && panel.includes(price), "Falta en el panel: " + label + " " + price);
+      }
+    });
+
+    await test("Los botones nuevos preseleccionan sus prendas", async () => {
+      for (const name of ["Chomba + short","Chomba cuello en V","Chomba cuello en V + short"]) {
+        resetOrder();
+        const cta = doc.querySelector('a[data-order-category="' + name + '"]');
+        assert(cta, "Falta el botón Pedir " + name);
+        cta.click();
+        await wait(20);
+        const selects = [...orderRow().querySelectorAll(".order-controls select")];
+        assert(selects[0].value === name, "No se seleccionó " + name);
+      }
       resetOrder();
-      const cta = doc.querySelector('a[data-order-category="Chomba + short"]');
-      assert(cta, "Falta el botón Pedir chomba + short");
-      cta.click();
+      doc.querySelector('a[data-order-category="Chomba + short"]').click();
       await wait(20);
-      const row = orderRow();
-      const selects = [...row.querySelectorAll(".order-controls select")];
-      assert(selects[0].value === "Chomba + short", "No se seleccionó Chomba + short");
-      const variants = [...selects[1].options].map(o => clean(o.textContent).split(/\s+[—–-]\s+/)[0]);
-      assert(variants.join("|") === "Simple|Bordado|TPU", "Variantes inesperadas: " + variants.join(", "));
+      const variants = [...orderRow().querySelectorAll(".order-controls select")[1].options].map(o => clean(o.textContent).split(" \u2014 ")[0]);
+      for (const name of ["Simple con bolsillo","Bordado con bolsillo","TPU con bolsillo"]) {
+        assert(variants.includes(name), "Falta la variante " + name);
+      }
+      resetOrder();
+      doc.querySelector('a[data-order-category="Chomba cuello en V"]').click();
+      await wait(20);
+      const vVariants = [...orderRow().querySelectorAll(".order-controls select")[1].options].map(o => clean(o.textContent).split(" \u2014 ")[0]);
+      assert(vVariants.join("|") === "Chomba cuello en V|Chomba cuello en V bordado|Chomba cuello en V TPU", "Variantes de cuello en V inesperadas: " + vVariants.join(", "));
     });
 
     await test("El mínimo de 10 prendas bloquea el envío", async () => {
@@ -302,60 +382,78 @@
       assert(message.includes("cliente o equipo"), "No se pidió el nombre del cliente/equipo: " + message);
     });
 
-    await test("Chomba + short se conserva en el resumen, el Excel y WhatsApp", async () => {
-      const row = selectOrder("Chomba + short", 1);
-      doc.getElementById("order-client-name").value = "Equipo de prueba";
-      setOrderQty(row, 10);
-      const captured = {url:"",alert:"",workbook:null,download:""};
-      const oldAlert = win.alert;
-      const oldOpen = win.open;
-      const oldAnchorClick = win.HTMLAnchorElement.prototype.click;
-      const oldWrite = win.XLSX && win.XLSX.write;
-      win.alert = msg => { captured.alert = String(msg); };
-      win.open = url => { captured.url = String(url); return null; };
-      win.HTMLAnchorElement.prototype.click = function() {
-        if (this.download && /\.xlsx$/i.test(this.download)) {
-          captured.download = this.download;
-          return;
-        }
-        return oldAnchorClick.call(this);
-      };
-      if (win.XLSX && oldWrite) {
-        win.XLSX.write = function(workbook, opts) {
-          captured.workbook = workbook;
-          return oldWrite.call(this, workbook, opts);
-        };
-      }
-      try {
-        doc.getElementById("order-send-whatsapp").click();
-        await wait(50);
-      } finally {
-        win.alert = oldAlert;
-        win.open = oldOpen;
-        win.HTMLAnchorElement.prototype.click = oldAnchorClick;
-        if (win.XLSX && oldWrite) win.XLSX.write = oldWrite;
-      }
+    await test("Chomba cuello en V y Rompeviento se conservan en WhatsApp y Excel", async () => {
+      const captured = await sendOrder([
+        {product:"Chomba cuello en V + short",index:5,qty:10},
+        {product:"Rompeviento",index:3,qty:10}
+      ]);
       assert(!captured.alert, "El envío se bloqueó: " + captured.alert);
       assert(captured.url, "No se generó el mensaje de WhatsApp");
-      const text = new URL(captured.url).searchParams.get("text") || "";
-      assert(text.includes("Chomba + short"), "WhatsApp no incluye Chomba + short");
-      assert(text.includes("Variante: Bordado"), "WhatsApp no incluye la variante bordado");
-      assert(text.includes("Unidades: 10"), "WhatsApp no incluye 10 unidades");
-      assert(text.includes("330.000"), "WhatsApp no incluye el total");
-      assert(text.includes("165.000"), "WhatsApp no incluye la seña");
+      const text = captured.text;
+      assert(text.includes("Chomba cuello en V + short"), "WhatsApp no incluye Chomba cuello en V + short");
+      assert(text.includes("Variante: TPU con bolsillo"), "WhatsApp no incluye la variante TPU con bolsillo");
+      assert(text.includes("Rompeviento"), "WhatsApp no incluye Rompeviento");
+      assert(text.includes("Variante: Reversible bordado"), "WhatsApp no incluye la variante Reversible bordado");
+      assert(text.includes("Unidades: 20"), "WhatsApp no incluye 20 unidades");
+      assert(text.includes("855.000"), "WhatsApp no incluye el total");
+      assert(text.includes("427.500"), "WhatsApp no incluye la seña");
       assert(captured.download && captured.download.endsWith(".xlsx"), "No se generó el archivo Excel");
       assert(captured.workbook, "No se capturó el libro Excel");
       const rows = win.XLSX.utils.sheet_to_json(captured.workbook.Sheets.Pedido,{header:1,defval:""});
-      const productRow = rows.find(r => r[0] === "Chomba + short");
-      assert(productRow, "El Excel no incluye Chomba + short");
-      assert(productRow[1] === "Bordado", "El Excel no incluye la variante bordado");
-      assert(Number(productRow[4]) === 10, "El Excel no incluye 10 unidades");
-      assert(Number(productRow[6]) === 33000, "El Excel no incluye el precio unitario");
-      assert(Number(productRow[7]) === 330000, "El Excel no incluye el subtotal");
+      const chombaRow = rows.find(r => r[0] === "Chomba cuello en V + short");
+      assert(chombaRow, "El Excel no incluye Chomba cuello en V + short");
+      assert(chombaRow[1] === "TPU con bolsillo", "El Excel no incluye la variante TPU con bolsillo");
+      assert(Number(chombaRow[4]) === 10, "El Excel no incluye 10 unidades de Chomba cuello en V + short");
+      assert(Number(chombaRow[6]) === 36500, "El Excel no incluye el precio unitario de Chomba cuello en V + short");
+      assert(Number(chombaRow[7]) === 365000, "El Excel no incluye el subtotal de Chomba cuello en V + short");
+      const rompeRow = rows.find(r => r[0] === "Rompeviento");
+      assert(rompeRow, "El Excel no incluye Rompeviento");
+      assert(rompeRow[1] === "Reversible bordado", "El Excel no incluye la variante Reversible bordado");
+      assert(Number(rompeRow[4]) === 10, "El Excel no incluye 10 unidades de Rompeviento");
+      assert(Number(rompeRow[6]) === 49000, "El Excel no incluye el precio unitario de Rompeviento");
+      assert(Number(rompeRow[7]) === 490000, "El Excel no incluye el subtotal de Rompeviento");
       const totalRow = rows.find(r => r[0] === "TOTAL ESTIMADO (ARS)");
       const depositRow = rows.find(r => String(r[0]).includes("SEÑA ESTIMADA"));
-      assert(totalRow && Number(totalRow[1]) === 330000, "El Excel no incluye el total");
-      assert(depositRow && Number(depositRow[1]) === 165000, "El Excel no incluye la seña");
+      assert(totalRow && Number(totalRow[1]) === 855000, "El Excel no incluye el total");
+      assert(depositRow && Number(depositRow[1]) === 427500, "El Excel no incluye la seña");
+    });
+
+    await test("Chomba cuello en V bordado y TPU se conservan en WhatsApp y Excel", async () => {
+      const captured = await sendOrder([
+        {product:"Chomba cuello en V",index:1,qty:10},
+        {product:"Chomba cuello en V",index:2,qty:10}
+      ]);
+      assert(!captured.alert, "El envío se bloqueó: " + captured.alert);
+      assert(captured.url, "No se generó el mensaje de WhatsApp");
+      const text = captured.text;
+      assert(text.includes("Chomba cuello en V bordado"), "WhatsApp no incluye Chomba cuello en V bordado");
+      assert(text.includes("Chomba cuello en V TPU"), "WhatsApp no incluye Chomba cuello en V TPU");
+      assert(text.includes("Variante: Chomba cuello en V bordado"), "WhatsApp no incluye la variante bordado");
+      assert(text.includes("Variante: Chomba cuello en V TPU"), "WhatsApp no incluye la variante TPU");
+      assert(text.includes("23.500"), "WhatsApp no incluye el precio unitario bordado");
+      assert(text.includes("24.500"), "WhatsApp no incluye el precio unitario TPU");
+      assert(text.includes("235.000"), "WhatsApp no incluye el subtotal bordado");
+      assert(text.includes("245.000"), "WhatsApp no incluye el subtotal TPU");
+      assert(text.includes("Unidades: 20"), "WhatsApp no incluye 20 unidades");
+      assert(text.includes("480.000"), "WhatsApp no incluye el total");
+      assert(text.includes("240.000"), "WhatsApp no incluye la seña");
+      assert(captured.download && captured.download.endsWith(".xlsx"), "No se generó el archivo Excel");
+      assert(captured.workbook, "No se capturó el libro Excel");
+      const rows = win.XLSX.utils.sheet_to_json(captured.workbook.Sheets.Pedido,{header:1,defval:""});
+      const vRows = rows.filter(r => r[0] === "Chomba cuello en V");
+      const bordado = vRows.find(r => r[1] === "Chomba cuello en V bordado");
+      const tpu = vRows.find(r => r[1] === "Chomba cuello en V TPU");
+      assert(bordado, "El Excel no incluye Chomba cuello en V bordado");
+      assert(tpu, "El Excel no incluye Chomba cuello en V TPU");
+      assert(Number(bordado[4]) === 10 && Number(tpu[4]) === 10, "El Excel no incluye 10 unidades de cada variante");
+      assert(Number(bordado[6]) === 23500, "El Excel no incluye el precio unitario bordado");
+      assert(Number(tpu[6]) === 24500, "El Excel no incluye el precio unitario TPU");
+      assert(Number(bordado[7]) === 235000, "El Excel no incluye el subtotal bordado");
+      assert(Number(tpu[7]) === 245000, "El Excel no incluye el subtotal TPU");
+      const totalRow = rows.find(r => r[0] === "TOTAL ESTIMADO (ARS)");
+      const depositRow = rows.find(r => String(r[0]).includes("SEÑA ESTIMADA"));
+      assert(totalRow && Number(totalRow[1]) === 480000, "El Excel no incluye el total");
+      assert(depositRow && Number(depositRow[1]) === 240000, "El Excel no incluye la seña");
     });
 
     await test("La página mantiene los selectores en móvil y escritorio", async () => {
@@ -363,12 +461,16 @@
       await wait(120);
       assert(win.getComputedStyle(doc.querySelector(".chomba-actions")).display === "grid", "En móvil no se apilan los botones de Chomba");
       const mobileProducts = [...orderRow().querySelectorAll(".order-controls select")[0].options].map(o => clean(o.textContent));
-      assert(mobileProducts.includes("Chomba + short"), "En móvil falta Chomba + short");
+      for (const name of productNames) {
+        assert(mobileProducts.includes(name), "En móvil falta " + name);
+      }
       iframe.style.width = "1280px";
       await wait(120);
       assert(win.getComputedStyle(doc.querySelector(".chomba-actions")).display === "flex", "En escritorio no se alinean los botones de Chomba");
       const desktopProducts = [...orderRow().querySelectorAll(".order-controls select")[0].options].map(o => clean(o.textContent));
-      assert(desktopProducts.includes("Chomba + short"), "En escritorio falta Chomba + short");
+      for (const name of productNames) {
+        assert(desktopProducts.includes(name), "En escritorio falta " + name);
+      }
     });
 
     render();
