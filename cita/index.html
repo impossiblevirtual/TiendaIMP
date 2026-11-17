@@ -18,12 +18,12 @@ input[type=text],input[type=number],textarea,select{width:100%;padding:13px 14px
 input:focus,textarea:focus,select:focus{border-color:var(--pink);box-shadow:0 0 0 3px #f08ab726}textarea{min-height:100px;resize:vertical}
 .consent{display:flex;gap:10px;align-items:flex-start;color:var(--muted);font-size:.88rem;line-height:1.5;margin:20px 0}
 button{width:100%;border:0;border-radius:14px;padding:15px 18px;background:linear-gradient(100deg,#d9689e,#f4a2c5);color:#291522;font-weight:800;font-size:1rem;cursor:pointer}
-.note{text-align:center;color:var(--muted);font-size:.78rem;line-height:1.5;margin:15px 0 0}.hp{position:absolute;left:-5000px}
+.note{text-align:center;color:var(--muted);font-size:.78rem;line-height:1.5;margin:15px 0 0}.status{display:none;margin:14px 0 0;padding:13px;border-radius:12px;line-height:1.45;font-size:.92rem}.status.show{display:block}.status.success{background:#183b2d;color:#c7f7dc}.status.error{background:#49232b;color:#ffd3da}.status.info{background:#382c40;color:#f4dffb}.hp{position:absolute;left:-5000px}
 @media(max-width:480px){body{padding:10px 9px 30px}.card{border-radius:17px}}
 </style></head>
 <body><main>
 <header class="hero"><div class="eyebrow">Una experiencia a tu manera</div><h1>Personalizá tu cita 💘</h1><p>Contame qué tipo de personalidad, energía y plan te gustaría compartir. No hay respuestas correctas: la idea es crear una experiencia cómoda y auténtica para ambos.</p></header>
-<section class="card"><form action="https://formsubmit.co/Poncesebastian.sp@gmail.com" method="POST">
+<section class="card"><form action="https://formsubmit.co/ajax/Poncesebastian.sp@gmail.com" method="POST">
 <input type="hidden" name="_subject" value="Nuevo perfil de cita 💘"><input type="hidden" name="_template" value="table"><input type="hidden" name="_language" value="es"><input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off">
 <div><div class="progress-top"><span>Tu perfil</span><span id="progressText">0 de 12 secciones</span></div><div class="track"><div class="bar" id="bar"></div></div></div>
 <fieldset><legend>1. ¿Qué personalidad te gustaría encontrar?</legend><p class="hint">Podés elegir más de una.</p><div class="options">
@@ -54,11 +54,39 @@ button{width:100%;border:0;border-radius:14px;padding:15px 18px;background:linea
 <label class="field" for="modalidad">Modalidad preferida</label><select id="modalidad" name="Modalidad"><option value="">Elegí una opción</option><option>Presencial</option><option>Virtual</option><option>A convenir</option></select>
 <label class="field" for="disponibilidad">Disponibilidad / fecha tentativa</label><input id="disponibilidad" name="Disponibilidad" type="text" placeholder="Días u horarios que te vienen bien"></fieldset>
 <label class="consent"><input type="checkbox" name="Confirmación de mayoría de edad y consentimiento" value="Confirmado" required><span>Confirmo que soy mayor de 18 años y entiendo que se trata de una experiencia consensuada. Ambas partes pueden establecer límites, cambiar de opinión o finalizar la cita en cualquier momento.</span></label>
-<button type="submit">Enviar mi perfil 💌</button><p class="note">Tus respuestas se enviarán de forma privada para coordinar la experiencia. Completar el formulario no confirma ni reserva una cita.</p>
+<button id="submitButton" type="submit">Enviar mi perfil 💌</button><p id="submitStatus" class="status" role="status" aria-live="polite"></p><p class="note">Tus respuestas se enviarán de forma privada para coordinar la experiencia. Completar el formulario no confirma ni reserva una cita.</p>
 </form></section><p class="note">Una buena cita empieza por la comodidad, el respeto y las ganas de pasarla bien.</p></main>
 <script>
 const form=document.querySelector('form'),bar=document.getElementById('bar'),label=document.getElementById('progressText');
 function progress(){const keys=['Personalidad','Trato','Romanticismo','Conversación','Energía','Tipo de cita','Coqueteo','Gestos','Evitar','Experiencia','Detalles especiales','Nombre'];let n=0;keys.forEach(k=>{const el=form.elements[k];if(k==='Detalles especiales'||k==='Nombre'){if(el.value.trim())n++;}else if(form.querySelector('[name="'+k+'"]:checked'))n++;});label.textContent=n+' de 12 secciones';bar.style.width=(n/12*100)+'%';}
 form.addEventListener('input',progress);form.addEventListener('change',progress);
-form.addEventListener('submit',e=>{if(Number(form.elements['Edad'].value)<18){e.preventDefault();form.elements['Edad'].setCustomValidity('Esta experiencia es solo para mayores de 18 años.');form.elements['Edad'].reportValidity();}else{form.elements['Edad'].setCustomValidity('');}});
+const submitButton=document.getElementById('submitButton'),submitStatus=document.getElementById('submitStatus');
+function showStatus(message,type){submitStatus.textContent=message;submitStatus.className='status show '+type;}
+form.addEventListener('submit',async e=>{
+ e.preventDefault();
+ const age=form.elements['Edad'];
+ if(Number(age.value)<18){age.setCustomValidity('Esta experiencia es solo para mayores de 18 años.');age.reportValidity();return;}
+ age.setCustomValidity('');
+ if(submitButton.disabled)return;
+ submitButton.disabled=true;submitButton.textContent='Enviando tu perfil…';
+ showStatus('Estamos enviando tus respuestas. No cierres esta página.','info');
+ try{
+  const payload={};
+  for(const [key,value] of new FormData(form).entries()){
+   if(Object.prototype.hasOwnProperty.call(payload,key)){payload[key]=Array.isArray(payload[key])?payload[key].concat(value):[payload[key],value];}
+   else payload[key]=value;
+  }
+  const response=await fetch(form.action,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
+  const result=await response.json();
+  if(String(result.success)!=='true'){
+   throw new Error(result.message||'El servicio no aceptó el envío. Revisá que el formulario esté activado por correo.');
+  }
+  showStatus('¡Perfil enviado correctamente! 💌 Gracias por completar el formulario.','success');
+  form.reset();progress();
+ }catch(error){
+  showStatus(error.message==='Failed to fetch'?'No pudimos conectar con el servicio de envío. Revisá tu conexión e intentá nuevamente.':'No se pudo enviar el formulario: '+(error.message||'error de conexión')+'. Tus respuestas siguen en pantalla; podés volver a intentarlo.','error');
+ }finally{
+  submitButton.disabled=false;submitButton.textContent='Enviar mi perfil 💌';
+ }
+});
 </script></body></html>
