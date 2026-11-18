@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
 Sitemap: https://impossiblevirtual.github.io/TiendaIMP/sitemap.xml
+Sitemap: https://impossiblevirtual.github.io/TiendaIMP/sitemap-impossible.xml
